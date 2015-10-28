@@ -169,6 +169,19 @@ public class XxDiaryApi {
 		return ResultUtils.success();
 	}
 	
+	@RequestMapping(value = "unfavorite", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String,Object> unfavorite(@RequestParam Map<String,Object> params) {
+		
+		try {
+			xxDiaryServer.unfavorite(params);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResultUtils.error();
+		}
+		return ResultUtils.success();
+	}
+	
 	// 认可日记
 	@RequestMapping(value = "accept", method = RequestMethod.POST)
 	@ResponseBody

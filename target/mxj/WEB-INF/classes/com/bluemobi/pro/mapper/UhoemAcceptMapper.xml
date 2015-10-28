@@ -150,14 +150,13 @@
 	<select id="findProjectName" parameterType="map" resultType="map">
 		SELECT
 			uep.`projectname`,
-			xo.`address`,
-			xo.`area_name`
+			uemho.`new_home_address` address
 		FROM
 			uhoem_erp_project uep
 		JOIN
-			xx_order xo
+			uhoem_erp_measure_house_order uemho
 		ON
-			uep.`orderid` = xo.`id`
+			uep.`orderid` = uemho.`id`
 		WHERE
 			uep.`autoId` = #{project_id}
 	</select>

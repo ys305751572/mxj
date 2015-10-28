@@ -45,7 +45,7 @@
 	<!-- 修改公告读取状态-设为已读 -->
 	<insert id="modifyIsRead" parameterType="map">
 		INSERT INTO
-			uhoem_new_isread
+			uhoem_news_isread
 		(
 			member_id,
 			news_id

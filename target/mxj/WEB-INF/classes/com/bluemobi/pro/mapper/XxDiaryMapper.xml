@@ -255,6 +255,27 @@
 		id = #{diaryId}
 	</update>
 
+	<!-- 取消收藏 -->
+	<delete id="unfavorite" parameterMap="map">
+		DELETE 
+		FROM
+			uhoem_erp_diary_member_favorite
+		WHERE
+			diary_id = #{diaryId}
+		AND
+			member_id = #{memberId}
+	</delete>
+	
+	<!-- 根据日记ID修改收藏记录数 -->
+	<update id="updateFavoriteCount2" parameterType="map">
+		UPDATE
+		uhoem_erp_diary
+		SET
+		favorite_count = (favorite_count - 1)
+		WHERE
+		id = #{diaryId}
+	</update>
+
 	<!-- 根据查询收藏表记录 -->
 	<select id="getFavorite" parameterType="map" resultType="map">
 		SELECT

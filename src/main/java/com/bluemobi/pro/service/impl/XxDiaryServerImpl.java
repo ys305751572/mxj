@@ -87,6 +87,12 @@ public class XxDiaryServerImpl extends BaseService{
 			this.getBaseDao().save(PRIFIX + ".updateFavoriteCount", params);
 		}
 		
+		@Transactional
+		public void unfavorite(Map<String,Object> params) throws Exception {
+			this.getBaseDao().save(PRIFIX + ".unfavorite", params);
+			this.getBaseDao().save(PRIFIX + ".updateFavoriteCount2", params);
+		}
+		
 		public void accept(Map<String,Object> params) throws Exception {
 			this.getBaseDao().update(PRIFIX + ".accept", params);
 		}
