@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bluemobi.pro.service.impl.UhoemTaskServiceImpl">
+
+	<!-- 根据ID获取task -->
+	<select id="findTaskById" parameterType="map" resultType="int">
+		SELECT	
+			uat.status
+		FROM
+			uhoem_accept_member_task uat
+		WHERE
+			uat.task_id = #{taskId}
+		AND
+			uat.member_id = #{memberId}
+		AND
+			uat.project_id = #{projectId}
+	</select>
+
+	<!-- 获取验收项列表 -->
+	<select id="findTaskList" resultType="map">
+		SELECT
+			uat.id,
+			uat.name,
+			t.status,
+			t.ctime,
+			t.score,
+			t.project_id,
+			t.accept,
+			t.id memberTaskId,
+			IFNULL(t.redo_time,"") redo_time
+		FROM
+			uhoem_accept_task uat
+		JOIN
+			uhoem_accept_member_task t
+		ON
+			uat.id = t.task_id
+		WHERE
+			t.member_id = #{memberId}
+	</select>
+
+	<!-- 根据任务ID获取节点列表 -->
+	<select id="findTaskNodeList" resultType="map" parameterType="map">
+		SELECT
+			uan.id,
+			uan.task_id,
+			uan.name,
+			mn.status
+		FROM
+			uhoem_accept_node uan
+		JOIN
+			uhoem_accept_member_node mn
+		ON
+			uan.`id` = mn.`node_id`
+		WHERE
+			mn.`member_id` = #{memberId}
+		AND
+			uan.task_id = #{taskId}
+	</select>
+
+	<!-- 根据用户ID查询已验证节点 -->
+	<select id="findMemberTaskNodeList" resultType="map" parameterType="map">
+		SELECT
+			uamn.id,
+			uamn.task_id,
+			uamn.node_id,
+			uamn.member_id,
+			uamn.status
+		FROM
+			uhoem_accept_member_node uamn
+		WHERE
+			uamn.task_id = #{taskId}
+		AND
+		uamn.member_id = #{memberId}
+	</select>
+
+	<!-- 根据用户ID和任务ID查询结果 -->
+	<select id="getTaskByMemberId" parameterType="map" resultType="map">
+		SELECT
+			uamt.id,
+			uamt.task_id,
+			uamt.project_id,
+			uamt.ctime
+		FROM
+		uhoem_accept_member_task uamt
+		WHERE
+		1 = 1
+		<if test="memberId != null and memberId != ''">
+			AND uamt.member_id = #{memberId}
+		</if>
+		<if test="taskId != null and taskId != ''">
+			AND uamt.task_id = #{taskId}
+		</if>
+		ORDER BY uamt.task_id
+	</select>
+
+	<!-- 生成任务记录 -->
+	<insert id="insertTask" parameterType="map">
+		INSERT INTO
+		uhoem_accept_member_task uamt
+		(
+			task_id,
+			member_id,
+			status,
+			ctime
+		)
+		VALUES
+		(
+			#{taskId},
+			#{memberId},
+			#{status},
+			#{ctime}
+		)
+	</insert>
+
+	<!-- 修改任务记录状态 -->
+	<update id="updateTaskStatus" parameterType="map">
+		UPDATE
+			uhoem_accept_member_task uamt
+			<set>
+				<if test="status != null and status != ''">
+					uamt.status = #{status},
+				</if>
+				<if test="score != null and score != ''">
+					uamt.score = #{score}
+				</if>
+			</set>
+		WHERE
+			uamt.task_id = #{taskId}
+		AND
+			uamt.project_id = #{projectId}
+	</update>
+	
+	<!-- 修改任务项记录状态 -->
+	<update id="updateNodeStatus" parameterType="map">
+		UPDATE
+			uhoem_accept_member_node
+		SET
+			status = 1
+		WHERE
+			node_id = #{nodeId}
+		AND
+			member_id = #{memberId}
+		AND
+			project_id = #{projectId}
+	</update>
+
+	<!-- 根据工程ID查找工程名称 -->
+	<select id="findProjectName" parameterType="map" resultType="map">
+		SELECT
+			uep.`projectname`,
+			xo.`address`,
+			xo.`area_name`
+		FROM
+			uhoem_erp_project uep
+		JOIN
+			xx_order xo
+		ON
+			uep.`orderid` = xo.`id`
+		WHERE
+			uep.`autoId` = #{project_id}
+	</select>
+
+	<!-- 根据ID查询客服外勤名称 -->
+	<select id="findBaseUsername" parameterType="map" resultType="string">
+		SELECT
+			b.`RealName`
+		FROM
+			uhoem_erp_baseuser b
+		WHERE 
+			b.`UserId` = #{user_id}
+		AND 
+			b.`UserType` = 3
+	</select>
+	
+	<!-- 更新是否参加的状态 -->
+	<update id="updateMemberTask" parameterType="map">
+		UPDATE	
+			uhoem_accept_member_task 
+		SET
+			accept = #{accept}
+		WHERE
+			id = #{memberTaskId}
+	</update>
+</mapper> 

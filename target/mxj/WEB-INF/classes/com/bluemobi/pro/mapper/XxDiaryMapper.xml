@@ -1,0 +1,344 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bluemobi.pro.service.impl.XxDiaryServerImpl">
+
+	<resultMap type="com.bluemobi.pro.entity.DirayDayProcess" id="findDetailWorks">
+		<id column="id" property="id" />
+		<result column="create_date" property="create_date" />
+		<result column="day" property="day" />
+		<result column="weather" property="weather" />
+		<result column="image_count" property="image_count" />
+		<result column="review_count" property="review_count" />
+		<result column="is_verify" property="is_verify" />
+		<result column="summary" property="summary"
+			typeHandler="com.bluemobi.mybatis.StringIfNull" />
+		<collection property="processes" resultMap="processes" />
+		<collection property="baseusers" resultMap="baseusers" />
+	</resultMap>
+
+	<resultMap type="com.bluemobi.pro.entity.ProcessVO" id="processes">
+		<id column="pid" property="pid" />
+		<result column="process_name" property="process_name"
+			typeHandler="com.bluemobi.mybatis.StringIfNull" />
+		<result column="state" property="state" />
+	</resultMap>
+
+	<resultMap type="com.bluemobi.pro.entity.BaseUserVO" id="baseusers">
+		<result column="UserId" property="UserId" />
+		<result column="RealName" property="RealName"
+			typeHandler="com.bluemobi.mybatis.StringIfNull" />
+		<result column="UserAvatar" property="UserAvatar"
+			typeHandler="com.bluemobi.mybatis.StringIfNull" />
+	</resultMap>
+
+	<!-- 日记列表 -->
+	<select id="page" parameterType="map" resultType="map">
+		SELECT
+		ued.id,
+		ued.pageview,
+		ued.review_count,
+		IFNULL(ued.`score`,0) score,
+		ued.`cover`,
+		um.`face_image`,
+		um.`name`,
+		ued2.`DicName`,
+		`xa`.`shot_name` areaName,
+		(SELECT `xa1`.shot_name FROM xx_area `xa1` WHERE `xa1`.id = `xa`.parent LIMIT
+		1) cityName,
+		uemht.covered_area,
+		uep.state
+		FROM
+		uhoem_erp_diary ued,
+		uhoem_member um,
+		uhoem_erp_project uep,
+		uhoem_erp_measure_house_task uemht,
+		uhoem_erp_measure_house_order uemho,
+		uhoem_erp_dictionary ued2,
+		xx_area `xa`
+		WHERE ued.`member_id` = um.`id`
+		AND ued.`project_id` = uep.`autoId`
+		AND uemht.`id` = uep.`TaskId`
+		AND ued2.`TypeId` = 2007
+		AND ued2.`DicValue` = uemht.`house_type`
+		AND uemho.id = uemht.`orderid`
+		AND `xa`.`id` = uemho.area
+
+		<if test="memberId != null and memberId != ''">
+			AND ued.member_id = #{memberId}
+		</if>
+		<if test="areaId != null and areaId != ''">
+			AND `xa`.id = #{areaId}
+		</if>
+		<if test="houseType != null and houseType != ''">
+			AND ued2.AutoId = #{houseType}
+		</if>
+		<if test="coveredAreaDown != null and coveredAreaDown != ''">
+			AND uemht.covered_area &gt; #{coveredAreaDown}
+		</if>
+		<if test="coveredAreaUp != null and coveredAreaUp != ''">
+			AND uemht.covered_area &lt; #{coveredAreaUp}
+		</if>
+		<if test="sortType == 0">
+			ORDER BY ued.favorite_count DESC
+		</if>
+		<if test="sortType == 1">
+			ORDER BY ued.create_date DESC
+		</if>
+	</select>
+
+	<!-- 详情施工列表 -->
+	<select id="detailWorkList" parameterType="map" resultMap="findDetailWorks">
+		SELECT
+			uedi.`id`,
+			uedi.`create_date`,
+			uedi.`image_count`,
+			uedi.`review_count`,
+			uedi.`day`,
+			uedi.weather,
+			uedi.summary,
+			uedi.`is_verify`,
+			uepb.`process_name`,
+			uepb.`state`,
+			ueb.`RealName`,
+			ueb.`UserAvatar`,
+			ueb.`UserId`,
+			uedi.process_id pid
+		FROM
+			uhoem_erp_diary_item uedi,
+			uhoem_erp_packageprocess_budget uepb,
+			uhoem_erp_packageprocess_role uepr,
+			uhoem_erp_baseuser ueb
+		WHERE
+			uedi.`process_id` = uepb.`processautoid`
+		AND
+			uepb.`autoid` = uepr.`processbudgetid`
+		AND
+			ueb.`UserId` = uepr.`userid`
+		AND
+			uedi.diary_id = #{diaryId}
+	</select>
+
+	<!-- 施工详情 -基本信息 -->
+	<select id="diaryDetailInfo" parameterType="map" resultType="map">
+		SELECT
+		ueb.`RealName`,
+		ueb.`UserAvatar`
+		FROM
+		uhoem_erp_diary ued
+		LEFT JOIN
+		uhoem_erp_project uep
+		ON
+		ued.project_id = uep.autoId
+		LEFT JOIN
+		uhoem_erp_measure_house_task uemht
+		ON
+		uep.TaskId = uemht.id
+		LEFT JOIN
+		uhoem_erp_baseuser ueb
+		ON
+		ueb.UserId = uemht.customer_service_confirm_user
+		WHERE
+		ued.id = #{diaryId}
+	</select>
+
+	<!-- 单日施工详情-基本信息 -->
+	<select id="diaryWorkInfo" parameterType="map" resultType="map">
+		SELECT
+		uedi.`id`,
+		uedi.`create_date`,
+		uedi.`day`,
+		uedi.weather,
+		uedi.`is_verify`,
+		uepb.`process_name`,
+		uepb.`state`,
+		ueb.`RealName`,
+		ueb.`UserAvatar`
+		FROM
+		uhoem_erp_diary_item uedi,
+		uhoem_erp_packageprocess_budget uepb,
+		uhoem_erp_packageprocess_role uepr,
+		uhoem_erp_baseuser ueb
+		WHERE
+		uedi.`process_id` = uepb.`process_id`
+		AND
+		uepb.`autoid` = uepr.`processbudgetid`
+		AND
+		ueb.`UserId` = uepr.`userid`
+		AND
+		uedi.id = #{diaryItemId}
+	</select>
+
+	<!-- 单日施工详情-图片列表 -->
+	<select id="diaryItemImageList" parameterType="map" resultType="map">
+		SELECT
+		uedi.id,
+		uedi.image_url
+		FROM
+		uhoem_erp_diary_image uedi
+		WHERE
+		uedi.diary_item = #{diaryItemId}
+	</select>
+
+	<!-- 单日施工详情- 评论列表 -->
+	<select id="diaryItemCommentList" parameterType="map"
+		resultType="map">
+		SELECT
+		uedr.id,
+		uedr.create_date,
+		uedr.content,
+		uedr.member,
+		uedr.reply_member,
+		(SELECT `name` FROM uhoem_member WHERE id = uedr.reply_member)
+		reply_member_name,
+		um.name,
+		um.face_image
+		FROM
+		uhoem_erp_diary_review uedr,
+		uhoem_member um
+		WHERE
+		uedr.diary_item = #{diaryItemId}
+		AND
+		um.id = uedr.member
+	</select>
+
+	<!-- 评论日记 -->
+	<insert id="comment" parameterType="map">
+		INSERT INTO
+		uhoem_erp_diary_review
+		(
+		create_date,
+		modify_date,
+		content,
+		ip,
+		visible,
+		member,
+		reply_member,
+		diary_item
+		)
+		VALUES
+		(
+		#{create_date},
+		#{modify_date},
+		#{content},
+		#{ip},
+		0,
+		#{member},
+		#{reply_member},
+		#{diary_item}
+		)
+	</insert>
+
+	<!-- 新增收藏记录 -->
+	<insert id="favorite" parameterType="map">
+		INSERT INTO
+		uhoem_erp_diary_member_favorite
+		(
+		diary_id,
+		member_id
+		)
+		VALUES
+		(
+		#{diaryId},
+		#{memberId}
+		)
+	</insert>
+
+	<!-- 根据日记ID修改收藏记录数 -->
+	<update id="updateFavoriteCount" parameterType="map">
+		UPDATE
+		uhoem_erp_diary
+		SET
+		favorite_count = (favorite_count + 1)
+		WHERE
+		id = #{diaryId}
+	</update>
+
+	<!-- 根据查询收藏表记录 -->
+	<select id="getFavorite" parameterType="map" resultType="map">
+		SELECT
+		*
+		FROM
+		uhoem_erp_diary_member_favorite
+		WHERE
+		diary_id = #{diaryId}
+		AND
+		member_id = #{memberId}
+	</select>
+
+	<!-- 修改是否认可当天日记 -->
+	<update id="accept" parameterType="map">
+		UPDATE
+		uhoem_erp_diary_item
+		SET
+		is_verify = 0
+		WHERE
+		id = #{diaryItemId}
+	</update>
+
+	<!-- 动态 我的日记被评论 -->
+	<select id="findDairyComment" parameterType="map" resultType="map">
+		SELECT
+		member.`name`,
+		uedi.`id`,
+		uedi.`day`
+		FROM
+		uhoem_erp_diary_review uedr ,
+		uhoem_erp_diary_item uedi,
+		uhoem_erp_diary ued,
+		uhoem_member member
+		WHERE
+		uedr.`diary_item` = uedi.`id`
+		AND
+		uedi.`diary_id` = ued.id
+		AND
+		ued.`member_id` = member.id
+		AND
+		ued.`member_id` = #{memberId}
+	</select>
+
+	<!-- 动态 有人回复了我 -->
+	<select id="findDairyReview" parameterType="map" resultType="map">
+		SELECT
+			member.`name`,
+			uedi.`id`,
+			uedi.`day`
+		FROM
+			uhoem_erp_diary_review uedr,
+			uhoem_member member,
+			uhoem_erp_diary_item uedi
+		WHERE
+			uedr.`member` = #{memberId}
+		AND
+			uedr.`reply_member`= member.`id`
+		AND
+			uedi.`id` = uedr.`diary_item`
+		AND
+			uedr.`reply_member` IS NOT NULL
+	</select>
+
+	<!-- 关注的日记更新了 -->
+	<select id="findDairyFavorite" parameterType="map" resultType="map">
+		SELECT
+		member.`name`,
+		uedi.`id`,
+		uedi.`day`
+		FROM
+		uhoem_erp_diary_member_favorite uedmf,
+		uhoem_erp_diary_item uedi,
+		uhoem_erp_diary_review uedr,
+		uhoem_member member,
+		uhoem_erp_diary ued
+		WHERE
+		uedmf.`member_id` = #{memberId}
+		AND
+		uedi.`diary_id` = uedmf.`diary_id`
+		AND
+		uedr.`diary_item` = uedi.`id`
+		AND
+		uedi.`diary_id` = ued.`id`
+		AND
+		member.`id`= ued.`member_id`
+	</select>
+</mapper> 

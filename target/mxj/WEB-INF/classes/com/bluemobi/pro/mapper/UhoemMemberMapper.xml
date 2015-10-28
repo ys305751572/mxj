@@ -1,0 +1,311 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace必须指向Dao接口 -->
+<mapper namespace="com.bluemobi.pro.service.impl.UhoemMemberServiceImpl">
+
+	<resultMap id="uhoemMemberResultMap" type="map">
+		<id property="id" column="id" />
+		<result property="create_date" column="create_date" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--   -->
+		<result property="modify_date" column="modify_date" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--   -->
+		<result property="address" column="address" /> <!--   -->
+		<result property="amount" column="amount" /> <!--   -->
+		<result property="balance" column="balance" /> <!--   -->
+		<result property="birth" column="birth" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--   -->
+		<result property="email" column="email" /> <!--   -->
+		<result property="gender" column="gender" typeHandler="com.bluemobi.mybatis.IntegerIfNull" /> <!--   -->
+		<result property="is_enabled" column="is_enabled" /> <!--   -->
+		<result property="is_locked" column="is_locked" /> <!--   -->
+		<result property="locked_date" column="locked_date" /> <!--   -->
+		<result property="login_date" column="login_date" /> <!--   -->
+		<result property="login_failure_count" column="login_failure_count" /> <!--   -->
+		<result property="login_ip" column="login_ip" /> <!--   -->
+		<result property="mobile" column="mobile" /> <!--   -->
+		<result property="name" column="name" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--   -->
+		<result property="password" column="password" /> <!--   -->
+		<result property="phone" column="phone" /> <!--   -->
+		<result property="point" column="point" /> <!--   -->
+		<result property="register_ip" column="register_ip" /> <!--   -->
+		<result property="safe_key_expire" column="safe_key_expire" /> <!--   -->
+		<result property="safe_key_value" column="safe_key_value" /> <!--   -->
+		<result property="username" column="username" /> <!--   -->
+		<result property="zip_code" column="zip_code" /> <!--   -->
+		<result property="member_rank" column="member_rank" /> <!--   -->
+		<result property="description" column="description" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--   -->
+		<result property="constellation" column="constellation" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--   -->
+		<result property="face_image" column="face_image" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--   -->
+	</resultMap>
+	<resultMap id="pageResultMap"  type="java.util.HashMap" extends="uhoemMemberResultMap"></resultMap>
+	<resultMap id="findResultMap"  type="java.util.HashMap" extends="uhoemMemberResultMap"></resultMap>
+
+	<!-- 用户登录-->
+	<select id="login" parameterType="map" resultMap="findResultMap">
+		SELECT
+		IFNULL(cast(id as char),"") id,
+		IFNULL(mobile,"") as mobile,
+		IFNULL(name,"") as name,
+		IFNULL(birth,"") as birth,
+		IFNULL(password,"") as password,
+		IFNULL(cast(gender as char),"") gender,
+		IFNULL(description,"") as description,
+		IFNULL(constellation,"") as constellation,
+		IFNULL(face_image,"") as face_image
+		FROM uhoem_member
+		WHERE
+			id = id
+			<if test="mobile != null and mobile != ''">
+				and mobile=#{mobile}
+			</if>
+			<if test="password != null and password != ''">
+				and password=#{password}
+			</if>
+	</select>
+
+	<!-- 通过openId登录-->
+	<select id="iLoginByOpenId" parameterType="map" resultMap="findResultMap">
+		SELECT
+		IFNULL(cast(um.id as char),"") id,
+		IFNULL(um.mobile,"") as mobile,
+		IFNULL(um.name,"") as name,
+		IFNULL(um.birth,"") as birth,
+		IFNULL(um.password,"") as password,
+		IFNULL(cast(um.gender as char),"") gender,
+		IFNULL(um.description,"") as description,
+		IFNULL(um.constellation,"") as constellation,
+		IFNULL(um.face_image,"") as face_image
+		FROM uhoem_oauth_login uol
+		left join uhoem_member um on um.id = uol.unionid
+		WHERE
+		uol.openid=#{openId} and uol.source=#{type}
+	</select>
+
+	<!-- 用户注册 -->
+	<insert id="iRegister" parameterType="map" useGeneratedKeys="true"
+			keyProperty="id">
+		INSERT INTO uhoem_member (
+		<if test="mobile != null and mobile != ''">
+			mobile,
+		</if>
+		<if test="password != null and password != ''">
+			password,
+		</if>
+		<if test="create_date != null and create_date != ''">
+			create_date,
+		</if>
+		<if test="type != null and type != ''">
+			type,
+		</if>
+			username
+		) VALUES (
+		<if test="mobile != null and mobile != ''">
+			#{mobile},
+		</if>
+		<if test="password != null and password != ''">
+			#{password},
+		</if>
+		<if test="create_date != null and create_date != ''">
+			#{create_date},
+		</if>
+		<if test="type != null and type != ''">
+			#{type},
+		</if>
+		#{username}
+		)
+	</insert>
+
+	<!-- 修改密码 -->
+	<update id="iUpdatePassword" parameterType="map">
+		UPDATE uhoem_member SET
+		password=#{password}
+		WHERE
+		mobile=#{mobile}
+	</update>
+
+	<!-- 根据手机号查询个人信息-->
+	<select id="iGetMemberInfoByMobile" parameterType="map" resultType="map">
+		SELECT
+		IFNULL(cast(id as char),"") id,
+		IFNULL(mobile,"") as mobile,
+		IFNULL(name,"") as name,
+		IFNULL(birth,"") as birth,
+		IFNULL(password,"") as password,
+		IFNULL(cast(gender as char),"") gender,
+		IFNULL(description,"") as description,
+		IFNULL(constellation,"") as constellation,
+		IFNULL(face_image,"") as face_image
+		FROM uhoem_member
+		WHERE mobile=#{mobile}
+	</select>
+
+	<!-- 根据昵称查数据-主要用户查询昵称是否重复 -->
+	<select id="iGetMemberNameByName" parameterType="map" resultType="string">
+		SELECT
+			m.name
+		FROM
+			uhoem_member m
+		WHERE
+			m.name = #{name}
+	</select>
+
+	<!-- 查询个人信息-->
+	<select id="iGetMemberInfo" parameterType="map" resultType="map">
+		SELECT 
+		IFNULL(cast(id as char),"") id,
+		IFNULL(mobile,"") as mobile,
+		IFNULL(name,"") as name,
+		IFNULL(birth,"") as birth,
+		IFNULL(password,"") as password,
+		IFNULL(cast(gender as char),"") gender,
+		IFNULL(description,"") as description,
+		IFNULL(constellation,"") as constellation,
+		IFNULL(face_image,"") as face_image
+		FROM uhoem_member
+		WHERE id=#{memberid}
+	</select>
+
+	<!-- 修改用户信息 -->
+	<update id="iUpdateInfo" parameterType="map">
+		UPDATE uhoem_member SET
+		<if test="memberid != null and memberid != ''">
+			id=#{memberid}
+		</if>
+		<if test="mobile != null and mobile != ''">
+			,mobile=#{mobile}
+		</if>
+		<if test="name != null and name != ''">
+			,name=#{name}
+		</if>
+		<if test="gender != null and gender != ''">
+			,gender=#{gender}
+		</if>
+		<if test="birth != null and birth != ''">
+			,birth=#{birth}
+		</if>
+		<if test="description != null">
+			,description=#{description}
+		</if>
+		<if test="constellation != null and constellation != ''">
+			,constellation=#{constellation}
+		</if>
+		<if test="face_image != null and face_image != ''">
+			,face_image=#{face_image}
+		</if>
+		WHERE
+		id=#{memberid}
+	</update>
+
+	<!-- 修改时间 -->
+	<update id="iUpdateTime" parameterType="map">
+		UPDATE uhoem_member
+		<set>
+			<if test="id != null and id != ''">
+				id=#{id},
+			</if>
+			<if test="create_date != null and create_date != ''">
+				create_date=#{create_date},
+			</if>
+			<if test="modify_date != null and modify_date != ''">
+				modify_date=#{modify_date},
+			</if>
+			<if test="locked_date != null and locked_date != ''">
+				locked_date=#{locked_date},
+			</if>
+			<if test="login_date != null and login_date != ''">
+				login_date=#{login_date},
+			</if>
+		</set>
+		WHERE
+		id=#{id}
+	</update>
+
+	<!-- 查询个人信息-->
+	<select id="getMemberInfo" parameterType="map" resultType="map">
+		SELECT
+		IFNULL(cast(id as char),"") id,
+		IFNULL(mobile,"") as mobile,
+		IFNULL(name,"") as name,
+		IFNULL(birth,"") as birth,
+		IFNULL(password,"") as password,
+		IFNULL(cast(gender as char),"") gender,
+		IFNULL(description,"") as description,
+		IFNULL(constellation,"") as constellation,
+		IFNULL(face_image,"") as face_image
+		FROM uhoem_member
+		WHERE id=#{id}
+	</select>
+
+	<!-- 用户绑定第三方账号OpenId -->
+	<insert id="bindingOpenId" parameterType="map" useGeneratedKeys="true"
+			keyProperty="id">
+		INSERT INTO uhoem_oauth_login (
+		<if test="type != null and type != ''">
+			source,
+		</if>
+		<if test="userId != null and userId != ''">
+			unionid,
+		</if>
+		<if test="openId != null and openId != ''">
+			openid,
+		</if>
+		<if test="appId != null and appId != ''">
+			appid,
+		</if>
+		id
+		) VALUES (
+		<if test="type != null and type != ''">
+			#{type},
+		</if>
+		<if test="userId != null and userId != ''">
+			#{userId},
+		</if>
+		<if test="openId != null and openId != ''">
+			#{openId},
+		</if>
+		<if test="appId != null and appId != ''">
+			#{appId},
+		</if>
+		0
+		)
+	</insert>
+
+	<!-- 根据用户名获取个人信息-->
+	<select id="iGetMemberInfoByUserName" parameterType="map" resultType="map">
+		SELECT
+		IFNULL(cast(id as char),"") id,
+		IFNULL(mobile,"") as mobile,
+		IFNULL(name,"") as name,
+		IFNULL(birth,"") as birth,
+		IFNULL(password,"") as password,
+		IFNULL(cast(gender as char),"") gender,
+		IFNULL(description,"") as description,
+		IFNULL(constellation,"") as constellation,
+		IFNULL(face_image,"") as face_image
+		FROM uhoem_member
+		WHERE username=#{username}
+	</select>
+
+	<!-- 通过用户ID查询所有已绑定的第三方openId-->
+	<select id="iFindOpenIdByMemberId" parameterType="map" resultType="map">
+		SELECT
+		IFNULL(cast(id as char),"") id,
+		IFNULL(openid,"") openid,
+		IFNULL(cast(unionid as char),"") unionid,
+		IFNULL(cast(source as char),"") source,
+		IFNULL(appid,"") appid
+		FROM uhoem_oauth_login
+		WHERE unionid=#{memberid}
+	</select>
+
+	<!-- 根据用户ID和第三方OpenId获取绑定信息-->
+	<select id="iCheckBinding" parameterType="map" resultType="map">
+		SELECT
+		IFNULL(cast(id as char),"") id,
+		IFNULL(openid,"") openid,
+		IFNULL(cast(unionid as char),"") unionid,
+		IFNULL(cast(source as char),"") source,
+		IFNULL(appid,"") appid
+		FROM uhoem_oauth_login
+		WHERE unionid = #{memberid} and openid = #{openId} and source = #{type}
+	</select>
+</mapper> 

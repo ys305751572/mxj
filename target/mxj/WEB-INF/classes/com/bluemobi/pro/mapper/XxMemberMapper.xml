@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bluemobi.pro.service.impl.XxMemberServiceImpl">
+	
+	<!-- 根据ID查询手机号 -->
+	<select id="findMobileById" parameterType="map" resultType="string">
+		SELECT	
+			m.mobile
+		FROM
+			uhoem_member m
+		WHERE
+			m.id = #{memberId}
+	</select>
+	
+	<!-- 修改手机号 -->
+	<update id="modifyMobile" parameterType="map">
+		UPDATE 
+			uhoem_member u
+		SET
+			u.mobile = #{mobile}
+		WHERE
+			u.id = #{memberId}
+	</update>
+</mapper> 

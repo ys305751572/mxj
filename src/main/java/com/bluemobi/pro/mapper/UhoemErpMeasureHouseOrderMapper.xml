@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bluemobi.pro.service.impl.UhoemErpMeasureHouseOrderServiceImpl">
+
+	<resultMap id="uhoemErpMeasureHouseOrderResultMap" type="map">
+		<id property="id" column="id" />
+		<result property="plan" column="plan" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--  方案id -->
+		<result property="member" column="member" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--  会员id必须 -->
+		<result property="new_home_address" column="new_home_address" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--  新居地址 -->
+		<result property="participants_number" column="participants_number" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--  参与人数 -->
+		<result property="house_type" column="house_type" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--  户型 -->
+		<result property="covered_area" column="covered_area" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--  面积 -->
+		<result property="contacts" column="contacts" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--  联系人 可以不为会员本人 -->
+		<result property="contact_mobile" column="contact_mobile" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--  联系方式 可为非会员本人 -->
+		<result property="plan_date" column="plan_date" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--  预约量房时间 -->
+		<result property="is_tailored_taxi_service" column="is_tailored_taxi_service" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--  是否接受专车服务 -->
+		<result property="receive_taxi_date" column="receive_taxi_date" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--  接车时间 -->
+		<result property="receive_taxi_address" column="receive_taxi_address" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--  接车地点 -->
+		<result property="create_user" column="create_user" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--  创建人 -->
+		<result property="create_date" column="create_date" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--  创建日期 -->
+	</resultMap>
+	<resultMap id="pageResultMap"  type="java.util.HashMap" extends="uhoemErpMeasureHouseOrderResultMap"></resultMap>
+	<resultMap id="findResultMap"  type="java.util.HashMap" extends="uhoemErpMeasureHouseOrderResultMap"></resultMap>
+
+	<insert id="insertMessages" parameterType="map">
+		INSERT INTO
+		 	uhoem_messages
+		 (
+		 	title,
+		 	content,
+		 	isread,
+		 	member_id
+		 )
+		 VALUES
+		 (
+		 	#{title},
+		 	#{content},
+		 	0,
+		 	#{memberId}
+		 )
+	</insert>
+
+	<!-- 新增 -->
+	<insert id="insert" parameterType="map" useGeneratedKeys="true"
+			keyProperty="id">
+		INSERT INTO uhoem_erp_measure_house_order (
+		<if test="plan != null ">
+			plan,
+		</if>
+		<if test="member != null ">
+			member,
+		</if>
+		<if test="new_home_address != null ">
+			new_home_address,
+		</if>
+		<if test="participants_number != null ">
+			participants_number,
+		</if>
+		<if test="house_type != null ">
+			house_type,
+		</if>
+		<if test="covered_area != null ">
+			covered_area,
+		</if>
+		<if test="contacts != null ">
+			contacts,
+		</if>
+		<if test="contact_mobile != null ">
+			contact_mobile,
+		</if>
+		<if test="plan_date != null ">
+			plan_date,
+		</if>
+		<if test="is_tailored_taxi_service != null ">
+			is_tailored_taxi_service,
+		</if>
+		<if test="receive_taxi_date != null and receive_taxi_date != ''">
+			receive_taxi_date,
+		</if>
+		<if test="receive_taxi_address != null and receive_taxi_address != ''">
+			receive_taxi_address,
+		</if>
+		<if test="create_user != null ">
+			create_user,
+		</if>
+		<if test="create_date != null ">
+			create_date,
+		</if>
+		<if test="modify_date != null">
+			modify_date,
+		</if>
+		id
+		) VALUES (
+		<if test="plan != null ">
+			#{plan},
+		</if>
+		<if test="member != null ">
+			#{member},
+		</if>
+		<if test="new_home_address != null ">
+			#{new_home_address},
+		</if>
+		<if test="participants_number != null ">
+			#{participants_number},
+		</if>
+		<if test="house_type != null ">
+			#{house_type},
+		</if>
+		<if test="covered_area != null ">
+			#{covered_area},
+		</if>
+		<if test="contacts != null ">
+			#{contacts},
+		</if>
+		<if test="contact_mobile != null ">
+			#{contact_mobile},
+		</if>
+		<if test="plan_date != null ">
+			#{plan_date},
+		</if>
+		<if test="is_tailored_taxi_service != null ">
+			${is_tailored_taxi_service},
+		</if>
+		<if test="receive_taxi_date != null and receive_taxi_date != ''">
+			#{receive_taxi_date},
+		</if>
+		<if test="receive_taxi_address != null and receive_taxi_address != ''">
+			#{receive_taxi_address},
+		</if>
+		<if test="create_user != null ">
+			#{create_user},
+		</if>
+		<if test="create_date != null ">
+			#{create_date},
+		</if>
+		<if test="modify_date != null">
+			#{modify_date},
+		</if>
+		0
+		)
+	</insert>
+
+	<!-- 主键查询-->
+	<select id="findByMember" parameterType="map" resultMap="findResultMap">
+		SELECT
+		id,
+		plan,
+		member,
+		house_type,
+		ROUND(covered_area,1) AS covered_area,
+		contacts,
+		contact_mobile,
+		plan_date,
+		is_tailored_taxi_service,
+		receive_taxi_date,
+		receive_taxi_address,
+		create_date
+		FROM uhoem_erp_measure_house_order
+		WHERE
+		member=#{member}
+	</select>
+
+	<!-- 主键查询-->
+	<select id="iBaseInfo" parameterType="map" resultMap="findResultMap">
+		SELECT
+			horder.id,
+			horder.new_home_address,
+			housetype.DicName AS house_type,
+			ROUND(horder.covered_area,1) AS covered_area,
+			horder.contact_mobile as mobile,
+			horder.plan_date,
+			horder.contacts
+		FROM uhoem_erp_measure_house_order horder
+		LEFT JOIN uhoem_erp_dictionary housetype ON housetype.DicValue = horder.house_type AND housetype.TypeId='2007' AND housetype.IsEnable=1
+		AND IsDelete=0
+		WHERE
+		member=#{member}
+		limit 1
+	</select>
+	
+	<select id="findGwMobile" parameterType="map" resultType="string">
+		  SELECT
+            baseuser.Mobile
+        FROM 
+        	uhoem_erp_measure_house_task task
+        LEFT JOIN 
+        	uhoem_erp_baseuser baseuser 
+        ON 
+        	baseuser.UserId = task.consultant_confirm_user
+        WHERE
+			task.orderid = #{id}
+	</select>
+</mapper> 

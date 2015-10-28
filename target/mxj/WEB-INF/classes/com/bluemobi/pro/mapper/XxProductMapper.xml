@@ -1,0 +1,391 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bluemobi.pro.service.impl.XxProductServiceImpl">
+
+	<resultMap id="xxProductResultMap" type="map">
+		<id property="id" column="id" />
+		<result property="create_date" column="create_date" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--   -->
+		<result property="modify_date" column="modify_date" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--   -->
+		<result property="allocated_stock" column="allocated_stock" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--   -->
+		<result property="attribute_value0" column="attribute_value0" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--   -->
+		<result property="attribute_value1" column="attribute_value1" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--   -->
+		<result property="attribute_value10" column="attribute_value10" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--   -->
+		<result property="attribute_value11" column="attribute_value11" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--   -->
+		<result property="attribute_value12" column="attribute_value12" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--   -->
+		<result property="attribute_value13" column="attribute_value13" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--   -->
+		<result property="attribute_value14" column="attribute_value14" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--   -->
+		<result property="attribute_value15" column="attribute_value15" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--   -->
+		<result property="attribute_value16" column="attribute_value16" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--   -->
+		<result property="attribute_value17" column="attribute_value17" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--   -->
+		<result property="attribute_value18" column="attribute_value18" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--   -->
+		<result property="attribute_value19" column="attribute_value19" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--   -->
+		<result property="attribute_value2" column="attribute_value2" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--   -->
+		<result property="attribute_value3" column="attribute_value3" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--   -->
+		<result property="attribute_value4" column="attribute_value4" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--   -->
+		<result property="attribute_value5" column="attribute_value5" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--   -->
+		<result property="attribute_value6" column="attribute_value6" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--   -->
+		<result property="attribute_value7" column="attribute_value7" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--   -->
+		<result property="attribute_value8" column="attribute_value8" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--   -->
+		<result property="attribute_value9" column="attribute_value9" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--   -->
+		<result property="cost" column="cost" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--   -->
+		<result property="full_name" column="full_name" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--   -->
+		<result property="hits" column="hits" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--   -->
+		<result property="image" column="image" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--   -->
+		<result property="introduction" column="introduction" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--   -->
+		<result property="is_gift" column="is_gift" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--   -->
+		<result property="is_list" column="is_list" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--   -->
+		<result property="is_marketable" column="is_marketable" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--   -->
+		<result property="is_top" column="is_top" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--   -->
+		<result property="keyword" column="keyword" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--   -->
+		<result property="market_price" column="market_price" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--   -->
+		<result property="memo" column="memo" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--   -->
+		<result property="month_hits" column="month_hits" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--   -->
+		<result property="month_hits_date" column="month_hits_date" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--   -->
+		<result property="month_sales" column="month_sales" /> <!--   -->
+		<result property="month_sales_date" column="month_sales_date" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--   -->
+		<result property="name" column="name" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--   -->
+		<result property="point" column="point" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--   -->
+		<result property="price" column="price" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--   -->
+		<result property="sales" column="sales" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--   -->
+		<result property="score" column="score" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--   -->
+		<result property="score_count" column="score_count" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--   -->
+		<result property="seo_description" column="seo_description" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--   -->
+		<result property="seo_keywords" column="seo_keywords" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--   -->
+		<result property="seo_title" column="seo_title" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--   -->
+		<result property="sn" column="sn" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--   -->
+		<result property="stock" column="stock" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--   -->
+		<result property="stock_memo" column="stock_memo" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--   -->
+		<result property="total_score" column="total_score" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--   -->
+		<result property="unit" column="unit" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--   -->
+		<result property="week_hits" column="week_hits" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--   -->
+		<result property="week_hits_date" column="week_hits_date" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--   -->
+		<result property="week_sales" column="week_sales" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--   -->
+		<result property="week_sales_date" column="week_sales_date" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--   -->
+		<result property="weight" column="weight" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--   -->
+		<result property="brand" column="brand" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--   -->
+		<result property="goods" column="goods" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--   -->
+		<result property="product_category" column="product_category" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--   -->
+		<result property="favorite_count" column="favorite_count" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--   -->
+		<result property="is_location" column="is_location" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--   -->
+		<result property="area" column="area" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--   -->
+		<result property="goods_type" column="goods_type" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--   -->
+		<result property="optional_discoun" column="optional_discoun" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--   -->
+		<result property="model_number" column="model_number" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--   -->
+		<result property="barcode" column="barcode" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--   -->
+		<result property="product_main_category" column="product_main_category" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--   -->
+		<result property="decor_group_cost" column="decor_group_cost" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--   -->
+		<result property="total_price" column="total_price" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--   -->
+	</resultMap>
+	<resultMap id="pageResultMap"  type="java.util.HashMap" extends="xxProductResultMap"></resultMap>
+	<resultMap id="findResultMap"  type="java.util.HashMap" extends="xxProductResultMap"></resultMap>
+
+	<!-- 分页查询-->
+	<select id="page" parameterType="map" resultMap="pageResultMap">
+		SELECT
+			xp.id,
+			xp.name,
+			xp.seo_description,
+			xp.product_main_category,
+			xp.image,
+			ROUND(xp.price,1) AS price,
+			xp.favorite_count
+		FROM xx_product xp
+		where
+			1=1
+			and is_list=1
+			and is_marketable =1
+			<if test="keywords != null  and keywords != ''">
+				and (xp.keyword like '%${keywords}%'
+				or xp.name like '%${keywords}%'
+				)
+			</if>
+			<!--
+				<if test="product_main_category != null  and product_main_category != ''">
+					and xp.product_main_category=#{product_main_category}
+				</if>
+				<if test="product_main_category == null or product_main_category == ''">
+					and xp.product_main_category in ('3','4','5')
+				</if>
+				<if test="product_category != null  and product_category != ''">
+					and xp.product_category=#{product_category}
+				</if>
+			-->
+			<if test="searchType == 1">
+					and xp.product_main_category in ('3','4','5')
+			</if>
+			<if test="searchType == 2">
+					and xp.product_main_category = #{product_category}
+			</if>
+			<if test="searchType == 3">
+				<if test="ids != null and ids.size() > 0">
+					and xp.product_category in
+					<foreach collection="ids" index="index" item="item" open="(" separator="," close=")">
+						#{item}
+					</foreach>
+				</if>
+			</if>
+			<if test="startPrice != null  and startPrice != ''">
+				<![CDATA[ and xp.price>=#{startPrice} ]]>
+			</if>
+			<if test="endPrice != null  and endPrice != ''">
+				<![CDATA[ and xp.price<=#{endPrice} ]]>
+			</if>
+			<if test="sort == 1">
+				order by xp.create_date desc
+			</if>
+			<if test="sort == 2">
+				order by xp.price asc
+			</if>
+			<if test="sort == 3">
+				order by xp.favorite_count desc
+			</if>
+			<if test="sort != 1 and sort!=2 and sort !=3">
+				order by xp.create_date desc
+			</if>
+
+	</select>
+
+	<!-- 热卖商品 -->
+	<select id="pageHot" parameterType="map" resultMap="pageResultMap">
+		SELECT
+		xp.id,
+		xp.name,
+		xp.seo_description,
+		xp.image,
+		xp.product_main_category,
+		ROUND(xp.price,1) AS price,
+		xp.favorite_count
+		FROM xx_product xp
+		where 1=1
+		and is_list=1
+		and is_marketable =1
+		<if test="keywords != null  and keywords != ''">
+			and (xp.keyword like '%${keywords}%'
+			or xp.name like '%${keywords}%'
+			)
+		</if>
+		and xp.product_main_category in ('3','4','5')
+		order by xp.favorite_count desc
+	</select>
+
+	<!-- 同类推荐 -->
+	<select id="sameKind" parameterType="map" resultMap="pageResultMap">
+		SELECT DISTINCT
+			xp.id,
+			xp.name,
+			xp.seo_description,
+			xp.image,
+			ROUND(xp.price,1) AS price,
+			xp.favorite_count
+		FROM
+		xx_product xp
+		LEFT JOIN xx_product_tag xpt ON xpt.products = xp.id
+		LEFT JOIN xx_tag xt ON xt.id = xpt.tags
+		WHERE
+		  	is_list=1
+			and is_marketable =1
+		and xp.product_category=(SELECT xp1.product_category from xx_product xp1 WHERE xp1.id=#{productid})
+		and xt.id in(SELECT xpt1.tags from xx_product_tag xpt1 WHERE xpt1.products=#{productid})
+		ORDER BY xp.favorite_count desc
+	</select>
+
+	<!-- 商品详情 -->
+	<select id="iDetail" parameterType="map" resultMap="findResultMap">
+		SELECT
+			xp.id,
+			xp.name,
+			xp.seo_description,
+			xp.image,
+			ROUND(xp.price,1) AS price,
+			xp.introduction,
+			xp.favorite_count,
+			xp.product_main_category,
+			IF((SELECT count(*) FROM uhoem_products_collect upc WHERE upc.memberid=#{memberid} and upc.productid=xp.id and upc.status=1)>0,"yes","no") as is_collect
+		FROM xx_product xp
+		WHERE id = #{productid}
+	</select>
+
+	<!-- 主键查询 -->
+	<select id="findOne" parameterType="map" resultMap="findResultMap">
+		SELECT
+		id,
+		create_date,
+		modify_date,
+		allocated_stock,
+		attribute_value0,
+		attribute_value1,
+		attribute_value10,
+		attribute_value11,
+		attribute_value12,
+		attribute_value13,
+		attribute_value14,
+		attribute_value15,
+		attribute_value16,
+		attribute_value17,
+		attribute_value18,
+		attribute_value19,
+		attribute_value2,
+		attribute_value3,
+		attribute_value4,
+		attribute_value5,
+		attribute_value6,
+		attribute_value7,
+		attribute_value8,
+		attribute_value9,
+		cost,
+		full_name,
+		hits,
+		image,
+		introduction,
+		is_gift,
+		is_list,
+		is_marketable,
+		is_top,
+		keyword,
+		market_price,
+		memo,
+		month_hits,
+		month_hits_date,
+		month_sales,
+		month_sales_date,
+		name,
+		point,
+		ROUND(price,1) AS price,
+		sales,
+		score,
+		score_count,
+		seo_description,
+		seo_keywords,
+		seo_title,
+		sn,
+		stock,
+		stock_memo,
+		total_score,
+		unit,
+		week_hits,
+		week_hits_date,
+		week_sales,
+		week_sales_date,
+		weight,
+		brand,
+		goods,
+		product_category,
+		favorite_count,
+		is_location,
+		area,
+		goods_type,
+		optional_discoun,
+		model_number,
+		barcode,
+		product_main_category,
+		decor_group_cost,
+		total_price
+		FROM xx_product
+		WHERE
+		id=#{id}
+	</select>
+
+	<!-- 主键查询 -->
+	<select id="getById" parameterType="map" resultMap="findResultMap">
+		SELECT
+		id,
+		create_date,
+		modify_date,
+		allocated_stock,
+		attribute_value0,
+		attribute_value1,
+		attribute_value10,
+		attribute_value11,
+		attribute_value12,
+		attribute_value13,
+		attribute_value14,
+		attribute_value15,
+		attribute_value16,
+		attribute_value17,
+		attribute_value18,
+		attribute_value19,
+		attribute_value2,
+		attribute_value3,
+		attribute_value4,
+		attribute_value5,
+		attribute_value6,
+		attribute_value7,
+		attribute_value8,
+		attribute_value9,
+		cost,
+		full_name,
+		hits,
+		image,
+		introduction,
+		is_gift,
+		is_list,
+		is_marketable,
+		is_top,
+		keyword,
+		market_price,
+		memo,
+		month_hits,
+		month_hits_date,
+		month_sales,
+		month_sales_date,
+		name,
+		point,
+		ROUND(price,1) AS price,
+		sales,
+		score,
+		score_count,
+		seo_description,
+		seo_keywords,
+		seo_title,
+		sn,
+		stock,
+		stock_memo,
+		total_score,
+		unit,
+		week_hits,
+		week_hits_date,
+		week_sales,
+		week_sales_date,
+		weight,
+		brand,
+		goods,
+		product_category,
+		favorite_count,
+		is_location,
+		area,
+		goods_type,
+		optional_discoun,
+		model_number,
+		barcode,
+		product_main_category,
+		decor_group_cost,
+		total_price
+		FROM xx_product
+		WHERE
+		id=#{id}
+	</select>
+
+	<!-- 修改 -->
+	<update id="updateFavoriteCount" parameterType="map">
+		UPDATE xx_product SET
+			favorite_count=#{favorite_count}
+		WHERE
+		id=#{id}
+	</update>
+
+	<!-- findOneById -->
+	<select id="findOneById" parameterType="map" resultMap="pageResultMap">
+		SELECT
+		xp.id,
+		xp.name,
+		xp.seo_description,
+		xp.image,
+		ROUND(xp.price,1) AS price,
+		xp.favorite_count
+		FROM xx_product xp
+		where xp.id=#{id}
+	</select>
+
+</mapper> 
