@@ -301,22 +301,23 @@
 	<!-- 动态 我的日记被评论 -->
 	<select id="findDairyComment" parameterType="map" resultType="map">
 		SELECT
-		member.`name`,
-		uedi.`id`,
-		uedi.`day`
+			member.`name`,
+			uedi.`id`,
+			uedi.`day`,
+			IFNULL(uedr.isread,0) isread
 		FROM
-		uhoem_erp_diary_review uedr ,
-		uhoem_erp_diary_item uedi,
-		uhoem_erp_diary ued,
-		uhoem_member member
+			uhoem_erp_diary_review uedr ,
+			uhoem_erp_diary_item uedi,
+			uhoem_erp_diary ued,
+			uhoem_member member
 		WHERE
-		uedr.`diary_item` = uedi.`id`
+			uedr.`diary_item` = uedi.`id`
 		AND
-		uedi.`diary_id` = ued.id
+			uedi.`diary_id` = ued.id
 		AND
-		ued.`member_id` = member.id
+			ued.`member_id` = member.id
 		AND
-		ued.`member_id` = #{memberId}
+			ued.`member_id` = #{memberId}
 	</select>
 
 	<!-- 动态 有人回复了我 -->
@@ -324,7 +325,8 @@
 		SELECT
 			member.`name`,
 			uedi.`id`,
-			uedi.`day`
+			uedi.`day`,
+			IFNULL(uedr.isread,0) isread
 		FROM
 			uhoem_erp_diary_review uedr,
 			uhoem_member member,
@@ -344,7 +346,8 @@
 		SELECT
 		member.`name`,
 		uedi.`id`,
-		uedi.`day`
+		uedi.`day`,
+		IFNULL(uedr.isread,0) isread
 		FROM
 		uhoem_erp_diary_member_favorite uedmf,
 		uhoem_erp_diary_item uedi,
@@ -362,4 +365,14 @@
 		AND
 		member.`id`= ued.`member_id`
 	</select>
+	
+	<!-- 修改 消息读取状态-设为已读 -->
+	<update id="modifyIsRead" parameterType="map">
+		UPDATE
+			uhoem_erp_diary_review
+		SET
+			isread = 1
+		WHERE
+			id = #{id}
+	</update>
 </mapper> 

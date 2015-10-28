@@ -208,4 +208,22 @@ public class XxDiaryApi {
 		}
 		return ResultUtils.map(respMap == null ? new HashMap<String,Object>(): respMap, "dynamic");
 	}
+	
+	/**
+	 * 读取状态
+	 * @param params
+	 * @return
+	 */
+	@RequestMapping(value = "readDynamic", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String,Object> readDynamic(@RequestParam Map<String,Object> params) {
+		
+		try {
+			xxDiaryServer.readDynamic(params);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResultUtils.error();
+		}
+		return ResultUtils.success();
+	}
 }

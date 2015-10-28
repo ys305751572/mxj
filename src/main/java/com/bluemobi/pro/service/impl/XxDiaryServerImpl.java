@@ -114,4 +114,13 @@ public class XxDiaryServerImpl extends BaseService{
 			allMap.put("favorite", favoriteList);
 			return allMap;
 		}
+		
+		public void readDynamic(Map<String,Object> params) throws Exception {
+			String[] ids = params.get("ids").toString().split(",");
+	    	for (String id : ids) {
+	    		Map<String,Object> idMap = new HashMap<String,Object>();
+	    		idMap.put("id", id);
+				this.getBaseDao().save(PRIFIX + ".modifyIsRead", idMap);
+			}
+		}
 }
