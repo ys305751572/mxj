@@ -67,6 +67,7 @@ public class XxDiaryServerImpl extends BaseService{
 		}
 		
 		// 评论单日施工
+		@Transactional
 		public void comment(Map<String,Object> params) throws Exception {
 			
 			Map<String,Object> paramMap = new HashMap<String,Object>();
@@ -78,6 +79,7 @@ public class XxDiaryServerImpl extends BaseService{
 			paramMap.put("reply_member", params.get("replyMemberId"));
 			paramMap.put("diary_item", params.get("diaryItemId"));
 			this.getBaseDao().save(PRIFIX + ".comment", paramMap);
+			this.getBaseDao().update(PRIFIX + ".modifyCommentCount", paramMap);
 		}
 		
 		@Transactional
@@ -113,6 +115,20 @@ public class XxDiaryServerImpl extends BaseService{
 			allMap.put("review", reviewList);
 			allMap.put("favorite", favoriteList);
 			return allMap;
+		}
+		
+		/**
+		 * 我的日记动态
+		 * @param params
+		 * @return
+		 * @throws Exception
+		 */
+		public int dynamicCount(Map<String,Object> params) throws Exception {
+			int count = this.getBaseDao().get(PRIFIX + ".findDairyCommentCount", params);
+			int count2 = this.getBaseDao().get(PRIFIX + ".findDairyReviewCount", params);
+			int count3 = this.getBaseDao().get(PRIFIX + ".findDairyFavoriteCount", params);
+			
+			return (count + count2 + count3);
 		}
 		
 		public void readDynamic(Map<String,Object> params) throws Exception {

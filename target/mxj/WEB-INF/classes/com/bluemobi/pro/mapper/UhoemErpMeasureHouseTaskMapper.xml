@@ -99,7 +99,7 @@
 		AND
 		  uhemh.`id` = udt.`measure_house`
 		AND
-		  udd.`id` = uef.`FileId`
+		  udd.`id` = uef.`OtherId`
 		AND
 		  udt.`drawing` = udd.`id`
 		AND

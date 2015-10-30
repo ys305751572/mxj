@@ -110,4 +110,13 @@ public class UhoemMemberServiceImpl extends BaseService {
     public Map<String, Object> iCheckBinding(Map<String, Object> params) throws Exception {
         return this.getBaseDao().get(PREFIX + ".iCheckBinding", params);
     }
+    
+    /**
+     * 修改用户设备号ID
+     * @param params
+     * @throws Exception
+     */
+    public void modifyUserDeviceId(Map<String,Object> params) throws Exception {
+    	this.getBaseDao().update(PREFIX + ".modifyUserDeviceId", params);
+    }
 }

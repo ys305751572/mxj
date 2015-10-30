@@ -99,6 +99,12 @@ public class XxMemberServiceImpl extends BaseService{
 	
 	// 修改手机号
 	public void modifyMobile(Map<String,Object> params) throws Exception {
+		Map<String,Object> memberMap = this.getBaseDao().get(PRIFIX + ".findUsernameById", params);
+		String mobile = memberMap.get("mobile") == null ? "" : memberMap.get("mobile").toString();
+		String username = memberMap.get("username") == null ? "" : memberMap.get("username").toString();
+		if( mobile.equals(username)) {
+			params.put("username", params.get("mobile"));
+		}
 		this.getBaseDao().update(PRIFIX + ".modifyMobile", params);
 	}
 }

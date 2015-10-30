@@ -229,6 +229,15 @@
 		#{diary_item}
 		)
 	</insert>
+	
+	<update id="modifyCommentCount" parameterType="map">
+		UPDATE
+			uhoem_erp_diary_item
+		SET
+			review_count = (review_count + 1)
+		WHERE
+			id = #{diary_item}
+	</update>
 
 	<!-- 新增收藏记录 -->
 	<insert id="favorite" parameterType="map">
@@ -301,8 +310,9 @@
 	<!-- 动态 我的日记被评论 -->
 	<select id="findDairyComment" parameterType="map" resultType="map">
 		SELECT
+			uedr.id,
 			member.`name`,
-			uedi.`id`,
+			uedi.`id` itemId,
 			uedi.`day`,
 			IFNULL(uedr.isread,0) isread
 		FROM
@@ -323,8 +333,9 @@
 	<!-- 动态 有人回复了我 -->
 	<select id="findDairyReview" parameterType="map" resultType="map">
 		SELECT
+			uedr.id,
 			member.`name`,
-			uedi.`id`,
+			uedi.`id` itemId,
 			uedi.`day`,
 			IFNULL(uedr.isread,0) isread
 		FROM
@@ -332,9 +343,9 @@
 			uhoem_member member,
 			uhoem_erp_diary_item uedi
 		WHERE
-			uedr.`member` = #{memberId}
+			uedr.`reply_member` = #{memberId}
 		AND
-			uedr.`reply_member`= member.`id`
+			uedr.`member`= member.`id`
 		AND
 			uedi.`id` = uedr.`diary_item`
 		AND
@@ -344,26 +355,94 @@
 	<!-- 关注的日记更新了 -->
 	<select id="findDairyFavorite" parameterType="map" resultType="map">
 		SELECT
-		member.`name`,
-		uedi.`id`,
-		uedi.`day`,
-		IFNULL(uedr.isread,0) isread
+			uedr.id,
+			member.`name`,
+			uedi.`id` itemId,
+			uedi.`day`,
+			IFNULL(uedr.isread,0) isread
 		FROM
-		uhoem_erp_diary_member_favorite uedmf,
-		uhoem_erp_diary_item uedi,
-		uhoem_erp_diary_review uedr,
-		uhoem_member member,
-		uhoem_erp_diary ued
+			uhoem_erp_diary_member_favorite uedmf,
+			uhoem_erp_diary_item uedi,
+			uhoem_erp_diary_review uedr,
+			uhoem_member member,
+			uhoem_erp_diary ued
 		WHERE
-		uedmf.`member_id` = #{memberId}
+			uedmf.`member_id` = #{memberId}
 		AND
-		uedi.`diary_id` = uedmf.`diary_id`
+			uedi.`diary_id` = uedmf.`diary_id`
 		AND
-		uedr.`diary_item` = uedi.`id`
+			uedr.`diary_item` = uedi.`id`
 		AND
-		uedi.`diary_id` = ued.`id`
+			uedi.`diary_id` = ued.`id`
 		AND
-		member.`id`= ued.`member_id`
+			member.`id`= ued.`member_id`
+	</select>
+	
+	<!--  动态 我的日记被评论  未读数-->
+	<select id="findDairyCommentCount" parameterType="map" resultType="int">
+		SELECT
+			COUNT(uedr.id) counts
+		FROM
+			uhoem_erp_diary_review uedr ,
+			uhoem_erp_diary_item uedi,
+			uhoem_erp_diary ued,
+			uhoem_member member
+		WHERE
+			uedr.`diary_item` = uedi.`id`
+		AND
+			uedi.`diary_id` = ued.id
+		AND
+			ued.`member_id` = member.id
+		AND
+			ued.`member_id` = #{memberId}
+		AND
+			uedr.isread = 0
+	</select>
+	
+	<!-- 动态 有人回复了我  未读数-->
+	<select id="findDairyReviewCount" parameterType="map" resultType="int">
+		SELECT
+			COUNT(uedr.id) counts
+			
+		FROM
+			uhoem_erp_diary_review uedr,
+			uhoem_member member,
+			uhoem_erp_diary_item uedi
+		WHERE
+			uedr.`reply_member` = #{memberId}
+		AND
+			uedr.`member`= member.`id`
+		AND
+			uedi.`id` = uedr.`diary_item`
+		AND
+			uedr.`reply_member` IS NOT NULL
+		AND
+			uedr.isread = 0
+	</select>
+	
+	<!-- 关注的日记更新了 -->
+	<select id="findDairyFavoriteCount" parameterType="map" resultType="int">
+		SELECT
+			COUNT(uedr.id) counts
+			
+		FROM
+			uhoem_erp_diary_member_favorite uedmf,
+			uhoem_erp_diary_item uedi,
+			uhoem_erp_diary_review uedr,
+			uhoem_member member,
+			uhoem_erp_diary ued
+		WHERE
+			uedmf.`member_id` = #{memberId}
+		AND
+			uedi.`diary_id` = uedmf.`diary_id`
+		AND
+			uedr.`diary_item` = uedi.`id`
+		AND
+			uedi.`diary_id` = ued.`id`
+		AND
+			member.`id`= ued.`member_id`
+		AND
+			uedr.isread = 0
 	</select>
 	
 	<!-- 修改 消息读取状态-设为已读 -->

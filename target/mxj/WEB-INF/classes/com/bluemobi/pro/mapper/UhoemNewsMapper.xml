@@ -23,23 +23,23 @@
 	<!-- 分页查询-->
 	<select id="page" parameterType="map" resultMap="pageResultMap">
 		SELECT
-			id,
-			title,
-			content,
-			create_time,
+			t.id,
+			t.title,
+			t.content,
+			t.create_time,
 			CASE
 		    WHEN 
-		    	(SELECT COUNT(*) FROM uhoem_news_isread news WHERE news.id = id AND  news.member_id = 60) &gt; 0
+		    	(SELECT COUNT(*) FROM uhoem_news_isread news WHERE news.news_id = t.id AND  news.member_id = #{memberId}) &gt; 0
 		    THEN 1
 		    WHEN
-		    	(SELECT COUNT(*) FROM uhoem_news_isread news WHERE news.id = id AND  news.member_id = 60) &lt;= 0
+		    	(SELECT COUNT(*) FROM uhoem_news_isread news WHERE news.news_id = t.id AND  news.member_id = #{memberId}) &lt;= 0
 		    THEN 
 		    	0
 		    END 
 		    AS isread
-		FROM uhoem_news
-		WHERE is_enabled=1
-		ORDER BY create_time desc
+		FROM uhoem_news t
+		WHERE t.is_enabled=1
+		ORDER BY t.create_time desc
 	</select>
 
 	<!-- 修改公告读取状态-设为已读 -->

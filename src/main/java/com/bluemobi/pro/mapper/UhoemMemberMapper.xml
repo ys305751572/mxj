@@ -308,4 +308,14 @@
 		FROM uhoem_oauth_login
 		WHERE unionid = #{memberid} and openid = #{openId} and source = #{type}
 	</select>
+	
+	<!-- 修改用户设备号 -->
+	<update id="modifyUserDeviceId" parameterType="map">
+		UPDATE
+			uhoem_member
+		SET
+			imei = #{imei}
+		WHERE
+			id = #{memberId}
+	</update>
 </mapper> 

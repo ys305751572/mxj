@@ -31,14 +31,16 @@
 		 	title,
 		 	content,
 		 	isread,
-		 	member_id
+		 	member_id,
+		 	create_time
 		 )
 		 VALUES
 		 (
 		 	#{title},
 		 	#{content},
 		 	0,
-		 	#{memberId}
+		 	#{memberId},
+		 	#{createTime}
 		 )
 	</insert>
 

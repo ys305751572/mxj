@@ -103,7 +103,10 @@ public class UhoemTaskServiceImpl extends BaseService {
 					
 					if(rMap != null) {
 						projectname = rMap.get("projectname") == null ? "" : rMap.get("projectname").toString();
-						address = rMap.get("address") == null ? "" : rMap.get("address").toString();
+						String address1 = rMap.get("address") == null ? "" : rMap.get("address").toString();
+						String address2 = rMap.get("area_name") == null ? "" : rMap.get("area_name").toString();
+						address = address2 + (address1.replaceAll("\\|", ""));
+						
 						baseusername = this.getBaseDao().get(PRIFIX + ".findBaseUsername", map);
 						ctime = map.get("ctime") == null ? "" : map.get("ctime").toString();
 						memberTaskId = Integer.parseInt(map.get("memberTaskId").toString());

@@ -150,11 +150,12 @@
 	<select id="findProjectName" parameterType="map" resultType="map">
 		SELECT
 			uep.`projectname`,
-			uemho.`new_home_address` address
+			uemho.`area_name`,
+			uemho.`address`
 		FROM
 			uhoem_erp_project uep
 		JOIN
-			uhoem_erp_measure_house_order uemho
+			xx_order uemho
 		ON
 			uep.`orderid` = uemho.`id`
 		WHERE

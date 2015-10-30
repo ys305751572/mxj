@@ -28,6 +28,7 @@ public class UhoemErpMeasureHouseOrderServiceImpl extends BaseService {
     private void insertMessages(Map<String, Object> params) throws Exception {
     	Map<String,Object> messageMap = new HashMap<String,Object>();
     	messageMap.put("memberId", params.get("member"));
+    	messageMap.put("createTime", new Date());
     	messageMap.put("title", "预约量房消息");
     	messageMap.put("content", "您的预约量房已成功");
     	this.getBaseDao().save(PREFIX + ".insertMessages", messageMap);

@@ -210,7 +210,7 @@ public class UhoemMemberApi {
 
             // 生成验证码
             String code = getCode(6);
-
+            System.out.println("code : " + code);
             String mobile = params.get("mobile").toString();
             String result = JavaSmsApi.sendShortMessage(mobile, code);
             // 成功
@@ -466,5 +466,21 @@ public class UhoemMemberApi {
         }
     }
 
-
+    /**
+     * 修改用户设备号
+     * @param params
+     * @return
+     */
+    @RequestMapping(value = "/modifyUserDeviceId", method = RequestMethod.POST)
+    @ResponseBody
+    public Map<String,Object> modifyUserDeviceId(@RequestParam Map<String,Object> params) {
+    	
+    	try {
+			uhoemMemberServiceImpl.modifyUserDeviceId(params);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResultUtils.error();
+		}
+    	return ResultUtils.success();
+    }
 }

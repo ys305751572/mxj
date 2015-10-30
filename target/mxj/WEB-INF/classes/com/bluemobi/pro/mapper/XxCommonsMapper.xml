@@ -35,11 +35,12 @@
 	<!-- 获取未读消息数 -->
 	<select id="countMessages" parameterType="map" resultType="int">
 		SELECT
-		COUNT(m.id)
+			COUNT(m.id)
 		FROM
-		uhoem_messages m
-		WHERE
-		m.member_id = #{memberId}
+			uhoem_messages m
+		LEFT JOIN uhoem_message_status ms ON ms.message_id = m.id
+		WHERE ms.`status`=1
+		and ms.memberid=#{memberid}
 	</select>
 
 	<!-- 获取未读通知数 -->

@@ -209,6 +209,21 @@ public class XxDiaryApi {
 		return ResultUtils.map(respMap == null ? new HashMap<String,Object>(): respMap, "dynamic");
 	}
 	
+	@RequestMapping(value = "dynamicCount", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String,Object> dirayDynamicCount(@RequestParam Map<String,Object> params) {
+		
+		if(ParamUtils.existEmpty(params, "memberId")) return ResultUtils.error(ErrorCode.ERROR_02);
+		Map<String,Object> respMap = new HashMap<String,Object>();
+		try {
+			int count = xxDiaryServer.dynamicCount(params);
+			respMap.put("count", count);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return ResultUtils.map2(respMap);
+	}
+	
 	/**
 	 * 读取状态
 	 * @param params
@@ -226,4 +241,6 @@ public class XxDiaryApi {
 		}
 		return ResultUtils.success();
 	}
+	
+	
 }
