@@ -24,24 +24,46 @@
 	<resultMap id="pageResultMap"  type="java.util.HashMap" extends="uhoemErpMeasureHouseOrderResultMap"></resultMap>
 	<resultMap id="findResultMap"  type="java.util.HashMap" extends="uhoemErpMeasureHouseOrderResultMap"></resultMap>
 
-	<insert id="insertMessages" parameterType="map">
+	<!-- 新增通知 -->
+	<insert id="insertMessages" parameterType="map" keyProperty="id" useGeneratedKeys="true">
 		INSERT INTO
 		 	uhoem_messages
 		 (
 		 	title,
 		 	content,
-		 	isread,
 		 	member_id,
-		 	create_time
+		 	create_time,
+		 	isread
 		 )
 		 VALUES
 		 (
 		 	#{title},
 		 	#{content},
-		 	0,
 		 	#{memberId},
-		 	#{createTime}
+		 	#{create_time},
+		 	#{isread}
 		 )
+	</insert>
+	
+	<!-- 新增通知状态表 -->
+	<insert id="insertMessagesStatus" parameterType="map">
+		INSERT INTO
+			uhoem_message_status
+		(
+			message_id,
+			send_type,
+			memberid,
+			sendtime,
+			status
+		)
+		VALUES
+		(
+			#{messageId},
+			2,
+			#{memberId},
+			NOW(),
+			1
+		)
 	</insert>
 
 	<!-- 新增 -->

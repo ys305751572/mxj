@@ -5,6 +5,7 @@ package com.bluemobi.utils;
 
 import org.apache.commons.lang.StringUtils;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -12,15 +13,6 @@ public class DateUtils {
 	public static String a = "";
 	
 	public static final String format = "yyyy-MM-dd HH:mm:ss";
-	public static void main(String[] aa){
-		String t = "http://www.uhoem.com/product/detail/130.jhtml";
-		t = t.substring(t.lastIndexOf("/")+1);
-		t = t.substring(0,t.lastIndexOf("."));
-		System.err.println(t);
-		//System.err.println(test1(10));
-		//System.err.println(1111);
-
-	}
 
 	public static void test(Integer i){
 		if(i>1){
@@ -40,8 +32,9 @@ public class DateUtils {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日");
 		try {
 			Long now = new Date().getTime();
-			Long mss = now - time;
-
+			Long now1 = System.currentTimeMillis();
+			Long mss = now1 - time;
+			
 			long days = mss / (1000 * 60 * 60 * 24);
 			long hours = (mss % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60);
 			long minutes = (mss % (1000 * 60 * 60)) / (1000 * 60);
@@ -68,6 +61,10 @@ public class DateUtils {
 		}
 	}
 
+	public static void main(String[] args) throws ParseException {
+		System.out.println(time(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2015-11-02 15:18:22").getTime()));
+	}
+	
 	// 传入时间字符串和format格式，返回友好时间格式
 	public static String stringToFriendlyDate(String tempTime,String ... patterns){
 		if(StringUtils.isEmpty(tempTime)){

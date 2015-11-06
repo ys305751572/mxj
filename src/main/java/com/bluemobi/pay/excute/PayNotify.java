@@ -16,45 +16,45 @@ public class PayNotify {
 	public static void notify(HttpServletRequest request, HttpServletResponse response) {
 		String partner = "1900000109";
 
-		// ÃÜÔ¿
+		// ï¿½ï¿½Ô¿
 		String key = "8934e7d15453e97507ef794cf7b0519d";
 
-		// ´´½¨Ö§¸¶Ó¦´ð¶ÔÏó
+		// ï¿½ï¿½ï¿½ï¿½Ö§ï¿½ï¿½Ó¦ï¿½ï¿½ï¿½ï¿½ï¿½
 		ResponseHandler resHandler = new ResponseHandler(request, response);
 		resHandler.setKey(key);
 
-		// ÅÐ¶ÏÇ©Ãû
+		// ï¿½Ð¶ï¿½Ç©ï¿½ï¿½
 		if (resHandler.isTenpaySign()) {
 
 			// Í¨Öªid
 			String notify_id = resHandler.getParameter("notify_id");
 
-			// ´´½¨ÇëÇó¶ÔÏó
+			// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 			RequestHandler queryReq = new RequestHandler(null, null);
-			// Í¨ÐÅ¶ÔÏó
+			// Í¨ï¿½Å¶ï¿½ï¿½ï¿½
 			TenpayHttpClient httpClient = new TenpayHttpClient();
-			// Ó¦´ð¶ÔÏó
+			// Ó¦ï¿½ï¿½ï¿½ï¿½ï¿½
 			ClientResponseHandler queryRes = new ClientResponseHandler();
 
-			// Í¨¹ýÍ¨ÖªID²éÑ¯£¬È·±£Í¨ÖªÀ´ÖÁ²Æ¸¶Í¨
+			// Í¨ï¿½ï¿½Í¨ÖªIDï¿½ï¿½Ñ¯ï¿½ï¿½È·ï¿½ï¿½Í¨Öªï¿½ï¿½ï¿½ï¿½ï¿½Æ¸ï¿½Í¨
 			queryReq.init();
 			queryReq.setKey(key);
 			queryReq.setGateUrl("https://gw.tenpay.com/gateway/verifynotifyid.xml");
 			queryReq.setParameter("partner", partner);
 			queryReq.setParameter("notify_id", notify_id);
 
-			// Í¨ÐÅ¶ÔÏó
+			// Í¨ï¿½Å¶ï¿½ï¿½ï¿½
 			httpClient.setTimeOut(5);
-			// ÉèÖÃÇëÇóÄÚÈÝ
+			// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 			try {
 				httpClient.setReqContent(queryReq.getRequestURL());
 				System.out.println("queryReq:" + queryReq.getRequestURL());
 			} catch (UnsupportedEncodingException e) {
 				e.printStackTrace();
 			}
-			// ºóÌ¨µ÷ÓÃ
+			// ï¿½ï¿½Ì¨ï¿½ï¿½ï¿½ï¿½
 			if (httpClient.call()) {
-				// ÉèÖÃ½á¹û²ÎÊý
+				// ï¿½ï¿½ï¿½Ã½ï¿½ï¿½ï¿½ï¿½ï¿½
 				try {
 					queryRes.setContent(httpClient.getResContent());
 				} catch (Exception e) {
@@ -63,34 +63,34 @@ public class PayNotify {
 				System.out.println("queryRes:" + httpClient.getResContent());
 				queryRes.setKey(key);
 
-				// »ñÈ¡·µ»Ø²ÎÊý
+				// ï¿½ï¿½È¡ï¿½ï¿½ï¿½Ø²ï¿½ï¿½ï¿½
 				String retcode = queryRes.getParameter("retcode");
 				String trade_state = queryRes.getParameter("trade_state");
 
 				String trade_mode = queryRes.getParameter("trade_mode");
 
-				// ÅÐ¶ÏÇ©Ãû¼°½á¹û
+				// ï¿½Ð¶ï¿½Ç©ï¿½ï¿½ï¿½ï¿½
 				if (queryRes.isTenpaySign() && "0".equals(retcode) && "0".equals(trade_state)
 						&& "1".equals(trade_mode)) {
-					System.out.println("¶©µ¥²éÑ¯³É¹¦");
-					// È¡½á¹û²ÎÊý×öÒµÎñ´¦Àí
+					System.out.println("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ñ¯ï¿½É¹ï¿½");
+					// È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òµï¿½ï¿½ï¿½ï¿½
 					System.out.println("out_trade_no:" + queryRes.getParameter("out_trade_no") + " transaction_id:"
 							+ queryRes.getParameter("transaction_id"));
 					System.out.println("trade_state:" + queryRes.getParameter("trade_state") + " total_fee:"
 							+ queryRes.getParameter("total_fee"));
-					// Èç¹ûÓÐÊ¹ÓÃÕÛ¿ÛÈ¯£¬discountÓÐÖµ£¬total_fee+discount=Ô­ÇëÇóµÄtotal_fee
+					// ï¿½ï¿½ï¿½ï¿½ï¿½Ê¹ï¿½ï¿½ï¿½Û¿ï¿½È¯ï¿½ï¿½discountï¿½ï¿½Öµï¿½ï¿½total_fee+discount=Ô­ï¿½ï¿½ï¿½ï¿½ï¿½total_fee
 					System.out.println("discount:" + queryRes.getParameter("discount") + " time_end:"
 							+ queryRes.getParameter("time_end"));
 							// ------------------------------
-							// ´¦ÀíÒµÎñ¿ªÊ¼
+							// ï¿½ï¿½ï¿½ï¿½Òµï¿½ï¿½Ê¼
 							// ------------------------------
 
-					// ´¦ÀíÊý¾Ý¿âÂß¼­
-					// ×¢Òâ½»Ò×µ¥²»ÒªÖØ¸´´¦Àí
-					// ×¢ÒâÅÐ¶Ï·µ»Ø½ð¶î
+					// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý¿ï¿½ï¿½ß¼ï¿½
+					// ×¢ï¿½â½»ï¿½×µï¿½ï¿½ï¿½Òªï¿½Ø¸ï¿½ï¿½ï¿½ï¿½ï¿½
+					// ×¢ï¿½ï¿½ï¿½Ð¶Ï·ï¿½ï¿½Ø½ï¿½ï¿½
 
 					// ------------------------------
-					// ´¦ÀíÒµÎñÍê±Ï
+					// ï¿½ï¿½ï¿½ï¿½Òµï¿½ï¿½ï¿½ï¿½ï¿½
 					// ------------------------------
 					try {
 						resHandler.sendToCFT("Success");
@@ -98,22 +98,22 @@ public class PayNotify {
 						e.printStackTrace();
 					}
 				} else {
-					// ´íÎóÊ±£¬·µ»Ø½á¹ûÎ´Ç©Ãû£¬¼ÇÂ¼retcode¡¢retmsg¿´Ê§°ÜÏêÇé¡£
-					System.out.println("²éÑ¯ÑéÖ¤Ç©ÃûÊ§°Ü»òÒµÎñ´íÎó");
+					// ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½Ø½ï¿½ï¿½Î´Ç©ï¿½ï¿½ï¿½Â¼retcodeï¿½ï¿½retmsgï¿½ï¿½Ê§ï¿½ï¿½ï¿½ï¿½ï¿½é¡£
+					System.out.println("ï¿½ï¿½Ñ¯ï¿½ï¿½Ö¤Ç©ï¿½ï¿½Ê§ï¿½Ü»ï¿½Òµï¿½ï¿½ï¿½ï¿½ï¿½");
 					System.out.println("retcode:" + queryRes.getParameter("retcode") + " retmsg:"
 							+ queryRes.getParameter("retmsg"));
 				}
 
 			} else {
 
-				System.out.println("ºóÌ¨µ÷ÓÃÍ¨ÐÅÊ§°Ü");
+				System.out.println("ï¿½ï¿½Ì¨ï¿½ï¿½ï¿½ï¿½Í¨ï¿½ï¿½Ê§ï¿½ï¿½");
 
 				System.out.println(httpClient.getResponseCode());
 				System.out.println(httpClient.getErrInfo());
-				// ÓÐ¿ÉÄÜÒòÎªÍøÂçÔ­Òò£¬ÇëÇóÒÑ¾­´¦Àí£¬µ«Î´ÊÕµ½Ó¦´ð¡£
+				// ï¿½Ð¿ï¿½ï¿½ï¿½ï¿½ï¿½Îªï¿½ï¿½ï¿½ï¿½Ô­ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ñ¾ï¿½ï¿½ï¿½ï¿½?ï¿½ï¿½Î´ï¿½Õµï¿½Ó¦ï¿½ï¿½
 			}
 		} else {
-			System.out.println("Í¨ÖªÇ©ÃûÑéÖ¤Ê§°Ü");
+			System.out.println("Í¨ÖªÇ©ï¿½ï¿½ï¿½ï¿½Ö¤Ê§ï¿½ï¿½");
 		}
 	}
 }

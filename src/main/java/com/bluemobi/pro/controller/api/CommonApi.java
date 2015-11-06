@@ -139,5 +139,15 @@ public class CommonApi implements Serializable{
     // ====================================================
     
     // 支付宝回调地址
-
+    @RequestMapping(value = "insertMessage222", method = RequestMethod.POST)
+    @ResponseBody
+    public Map<String,Object> insertMessage222() {
+    	try {
+			xxCommonsServiceImpl.insertMessage();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResultUtils.error();
+		}
+    	return ResultUtils.success();
+    }
 }

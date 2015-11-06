@@ -48,7 +48,7 @@ public class UhoemMessagesApi {
                 // 时间格式化
                 Long templong = 0L;
                 try {
-                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                     String temp = (String) map.get("create_time");
                     templong = sdf.parse(temp).getTime();
                 } catch (Exception e) {
@@ -58,6 +58,7 @@ public class UhoemMessagesApi {
                 map.put("title", map.get("title"));
                 map.put("content", map.get("content"));
                 map.put("id", map.get("id"));
+                map.put("isread", map.get("isread"));
             }
             return ResultUtils.parse(result);
         } catch (Exception e) {

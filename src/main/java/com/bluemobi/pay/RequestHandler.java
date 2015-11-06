@@ -15,13 +15,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.bluemobi.pay.util.MD5Util;
 import com.bluemobi.pay.util.TenpayUtil;
-
-/**
- * ��������
- * ��������̳д��࣬��дcreateSign�������ɡ�
- * @author miklchen
- *
- */
 public class RequestHandler {
 	
 	/** ���url��ַ */

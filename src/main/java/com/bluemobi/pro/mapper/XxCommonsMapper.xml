@@ -40,7 +40,8 @@
 			uhoem_messages m
 		LEFT JOIN uhoem_message_status ms ON ms.message_id = m.id
 		WHERE ms.`status`=1
-		and ms.memberid=#{memberid}
+		and m.isread = 0
+		and ms.memberid=#{memberId}
 	</select>
 
 	<!-- 获取未读通知数 -->

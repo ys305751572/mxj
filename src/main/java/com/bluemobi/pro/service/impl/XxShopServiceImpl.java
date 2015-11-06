@@ -12,6 +12,7 @@ import java.util.Map.Entry;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.cassandra.cli.CliParser.exitStatement_return;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -47,7 +48,7 @@ public class XxShopServiceImpl extends BaseService {
 	}
 
 	// 根据商品ID获取商品规格
-	public List getSpec(Map<String, Object> params) throws Exception {
+	public Map<String,Object> getSpec(Map<String, Object> params) throws Exception {
 
 		String productId = params.get("productId").toString();
 		List<Map<String, Object>> pidList = this.getProductById(Long.parseLong(productId));
@@ -60,7 +61,57 @@ public class XxShopServiceImpl extends BaseService {
 				addValuetoSpec(specList, specvalueList);
 			}
 		}
-		return specList == null ? Collections.emptyList() : specList;
+		Map<String,Map<String,Object>> m = getSpecProduct(pidList);
+		
+		Map<String,Object> allMap = new HashMap<String,Object>();
+		allMap.put("spec", specList);
+		allMap.put("array", m);
+		return allMap;
+	}
+	
+	/**
+	 * 
+	 * @param params
+	 * @return
+	 * @throws Exception
+	 */
+	public Map<String,Map<String,Object>> getSpecProduct(List<Map<String, Object>> pidList) throws Exception {
+		List list = this.getBaseDao().getList(PRIFIX + ".getSpecByPid", pidList);
+		Map<String,Map<String,Object>> returnMap = new HashMap<String,Map<String,Object>>();
+		String pid = "";
+		Map<String,Object> map = null;
+		Map<String,Object> productMap = null;
+		StringBuffer buffer = null;
+		for (Object object : list) {
+			
+			if(object != null) {
+				map = (Map<String,Object>) object;
+				String pid2 = map.get("productId").toString();
+				if(!pid.equals(pid2)) {
+					
+					if(buffer != null && buffer.toString().length() > 0) {
+						returnMap.put(buffer.toString(), productMap);
+					}
+					buffer = new StringBuffer();
+					pid = pid2;
+					productMap = new HashMap<String,Object>();
+					productMap.put("productId", map.get("productId"));
+					productMap.put("price", map.get("price"));
+					productMap.put("productName", map.get("productName"));
+					productMap.put("productFullName", map.get("productFullName"));
+					productMap.put("image", map.get("image"));
+					productMap.put("pmcId", map.get("pmcId"));
+					buffer.append(map.get("vid"));
+				}
+				else {
+					buffer.append(",").append(map.get("vid"));
+				}
+			}
+		}
+		if(buffer != null && buffer.length() > 0) {
+			returnMap.put(buffer.toString(), productMap);
+		}
+		return returnMap;
 	}
 
 	//
@@ -195,6 +246,8 @@ public class XxShopServiceImpl extends BaseService {
 	@Transactional
 	public String createOrder(Map<String, Object> params) throws Exception {
 
+		params.put("productIds", params.get("productId"));
+		
 		String sn = FileHelper.getTimeFileName();
 
 		Map<String, Object> orderMap = new HashMap<String, Object>();
@@ -292,21 +345,26 @@ public class XxShopServiceImpl extends BaseService {
 //		this.getBaseDao().update(PRIFIX + ".updateCartMember", params);
 
 		// 删除对应的购物车数据
+		
 		deleteCart(params);
 
 		return sn;
 	}
-
+	
+	/**
+	 * 删除购物车
+	 * @param params
+	 */
 	private void deleteCart(Map<String, Object> params) {
 		long memberId = Long.parseLong(params.get("memberId").toString());
-		String productIdstr = params.get("productId") == null ? "" : params.get("productId").toString();
+		String productIdstr = params.get("productIds") == null ? "" : params.get("productIds").toString();
 		if (StringUtils.isNotBlank(productIdstr)) {
 			String[] productIds = productIdstr.split("\\|");
 			Map<String, Object> cartMap = new HashMap<String, Object>();
 			cartMap.put("memberId", memberId);
 			try {
 				for (String product : productIds) {
-					cartMap.put("productId", product);
+					cartMap.put("productId", product.split(",")[0]);
 					this.getBaseDao().delete(PRIFIX + ".deleteCartByProductId", cartMap);
 				}
 			} catch (Exception e) {
@@ -400,6 +458,19 @@ public class XxShopServiceImpl extends BaseService {
 		return page;
 	}
 
+	/**
+	 * 检测该订单是否已评价
+	 * @param params
+	 * @return
+	 * @throws Exception
+	 */
+	public Boolean isCommented(Map<String,Object> params) throws Exception {
+		//0：待支付 1：已支付 2：已取消3：已收货4：已评价
+		int status = this.getBaseDao().getObject(PRIFIX + ".findOrderStatus", params);
+		if(status == 4) { return Boolean.valueOf(true); }
+		return Boolean.valueOf(false);
+	}
+	
 	// 一次评价多个商品
 	@Transactional
 	public void comments(Map<String, Object> params) throws Exception {

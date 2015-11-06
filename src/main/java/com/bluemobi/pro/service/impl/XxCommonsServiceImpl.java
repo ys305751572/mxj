@@ -1,5 +1,6 @@
 package com.bluemobi.pro.service.impl;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -7,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.bluemobi.sys.service.BaseService;
+import com.bluemobi.utils.DateUtils;
 
 @Service
 public class XxCommonsServiceImpl extends BaseService{
@@ -44,5 +46,21 @@ public class XxCommonsServiceImpl extends BaseService{
 	// 计算通知的未读数
 	private Integer countNews(Map<String, Object> params) throws Exception {
 		return this.getBaseDao().get(PRIFIX + ".countNews", params);
+	}
+	
+	// =============================test===========================
+	public void insertMessage() throws Exception {
+		Map<String,Object> messageMap = new HashMap<String,Object>();
+    	messageMap.put("memberId", "1");
+    	messageMap.put("create_time", DateUtils.getCurrentTime());
+    	messageMap.put("title", "预约量房消息");
+    	messageMap.put("content", "您的预约量房已成功");
+    	messageMap.put("isread", 0);
+    	this.getBaseDao().save("com.bluemobi.pro.service.impl.UhoemErpMeasureHouseOrderServiceImpl.insertMessages", messageMap);
+    	
+    	Map<String,Object> messageStatusMap = new HashMap<String,Object>();
+    	messageStatusMap.put("messageId", messageMap.get("id"));
+    	messageStatusMap.put("memberId", 1);
+    	this.getBaseDao().save("com.bluemobi.pro.service.impl.UhoemErpMeasureHouseOrderServiceImpl.insertMessagesStatus", messageStatusMap);
 	}
 }

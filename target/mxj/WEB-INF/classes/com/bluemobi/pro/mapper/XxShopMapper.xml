@@ -178,6 +178,16 @@
 		ci.product = #{productId}
 	</update>
 
+	<!-- 查询订单状态 -->
+	<select id="findOrderStatus" parameterType="map" resultType="int">
+		SELECT
+			t.order_status
+		FROM
+			xx_order t
+		WHERE
+			t.id = #{orderId}
+	</select>
+	
 	<!-- 评论商品 -->
 	<insert id="insertComment" parameterType="map">
 		INSERT INTO
@@ -532,7 +542,7 @@
 		FROM
 			xx_cart_item
 		WHERE
-		    id =
+		    id = 
 			(SELECT
 				a.cid
 			 FROM

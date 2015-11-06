@@ -63,20 +63,20 @@ public class XxShopApi {
 	
 	
 	// 获取规格
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings({ "unchecked" })
 	@RequestMapping(value = "getSpec", method = RequestMethod.POST)
 	@ResponseBody
 	public Map<String,Object> getSpec(@RequestParam Map<String,Object> params) {
 		
 		if(ParamUtils.existEmpty(params, "productId")) return ResultUtils.error(ErrorCode.ERROR_02);
-		List specList = new ArrayList();
+		Map<String,Object> map = null;
 		try {
-			specList = xxShopService.getSpec(params);
+			map = xxShopService.getSpec(params);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return ResultUtils.error();
 		}
-		return specList == null ? Collections.EMPTY_MAP : ResultUtils.parse(specList);
+		return map == null ? Collections.EMPTY_MAP : ResultUtils.map2(map);
 	}
 	
 	//
@@ -281,6 +281,7 @@ public class XxShopApi {
 	public Map<String,Object> comment(@RequestParam Map<String,Object> params) {
 		
 		try {
+//			if(xxShopService.isCommented(params)) return ResultUtils.error(ErrorCode.ERROR_13);
 			xxShopService.comments(params);
 		} catch (Exception e) {
 			e.printStackTrace();

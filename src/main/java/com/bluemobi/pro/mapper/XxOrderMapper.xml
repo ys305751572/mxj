@@ -6,6 +6,7 @@
 	
 	<resultMap type="com.bluemobi.pro.entity.OrderVO" id="findOrderByMemberId">
 		<id column="oid" property="id"/>
+		<result column="order_status" property="order_status"/>
 		<result column="expire" property="expire"/>
 		<result column="create_date" property="create_date"/>
 		<result column="sn" property="sn"/>
@@ -219,7 +220,7 @@
 			oi.quantity product_quantity,
 			oi.full_name name,
 			oi.price,
-			oi.thumbnail image,
+			IFNULL(oi.thumbnail,"") image,
 			oi.orders
 		FROM
 			xx_order_item oi,

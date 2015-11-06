@@ -28,8 +28,9 @@
 			IFNULL(m.isread,0) isread
 		FROM
 			uhoem_messages m
-		WHERE 
-			m.member_id=#{memberid}
+		LEFT JOIN uhoem_message_status ms ON ms.message_id = m.id
+		WHERE ms.`status`=1
+		and ms.memberid=#{memberid}
 		ORDER BY m.create_time desc
 	</select>
 	

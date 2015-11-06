@@ -396,7 +396,7 @@
 		AND
 			ued.`member_id` = #{memberId}
 		AND
-			uedr.isread = 0
+			(uedr.isread = 0 or uedr.isread is null)
 	</select>
 	
 	<!-- 动态 有人回复了我  未读数-->
@@ -417,7 +417,7 @@
 		AND
 			uedr.`reply_member` IS NOT NULL
 		AND
-			uedr.isread = 0
+			(uedr.isread = 0 or uedr.isread is null)
 	</select>
 	
 	<!-- 关注的日记更新了 -->
@@ -442,7 +442,7 @@
 		AND
 			member.`id`= ued.`member_id`
 		AND
-			uedr.isread = 0
+			(uedr.isread = 0 or uedr.isread is null)
 	</select>
 	
 	<!-- 修改 消息读取状态-设为已读 -->

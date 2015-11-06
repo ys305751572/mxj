@@ -97,11 +97,6 @@
 		s.id,
 		s.specification,
 		s.name,
-		p.products,
-		xp.image,
-		xp.full_name,
-		xp.name pname,
-		xp.price,
 		xpc.id xpcid
 		FROM
 		xx_specification_value s
@@ -178,6 +173,16 @@
 		ci.product = #{productId}
 	</update>
 
+	<!-- 查询订单状态 -->
+	<select id="findOrderStatus" parameterType="map" resultType="int">
+		SELECT
+			t.order_status
+		FROM
+			xx_order t
+		WHERE
+			t.id = #{orderId}
+	</select>
+	
 	<!-- 评论商品 -->
 	<insert id="insertComment" parameterType="map">
 		INSERT INTO
@@ -236,6 +241,8 @@
 		WHERE
 		1 = 1
 		AND
+			r.is_show = 1
+		AND
 		r.product = #{productId}
 		<if test="type == 1">
 			AND r.score = 1
@@ -259,6 +266,30 @@
 		xx_product p
 		WHERE
 		p.goods = (SELECT goods FROM xx_product pp WHERE pp.id = #{productId})
+	</select>
+	
+	
+	<select id="getSpecByPid" parameterType="java.util.List" resultType="map">
+		SELECT 
+		  vv.`specification` sid,
+		  v.`specification_values` vid ,
+		  p.`id` productId,
+		  p.name productName,
+		  p.full_name productFullName,
+		  p.image,
+		  p.`price`,
+		  p.product_main_category pmcId
+		FROM
+		  xx_product_specification_value v 
+		  JOIN xx_specification_value vv 
+		    ON v.`specification_values` = vv.`id` 
+		  JOIN xx_product p 
+		    ON p.`id` = v.`products` 
+		WHERE v.`products` IN 
+		<foreach item="item" collection="list" open="(" separator="," close=")">
+			#{item.id}
+		</foreach>
+		ORDER BY p.`id`,sid
 	</select>
 
 
@@ -532,7 +563,7 @@
 		FROM
 			xx_cart_item
 		WHERE
-		    id =
+		    id = 
 			(SELECT
 				a.cid
 			 FROM

@@ -96,6 +96,7 @@
 			1=1
 			and is_list=1
 			and is_marketable =1
+			and goods_type = 1
 			<if test="keywords != null  and keywords != ''">
 				and (xp.keyword like '%${keywords}%'
 				or xp.name like '%${keywords}%'
@@ -161,6 +162,7 @@
 		where 1=1
 		and is_list=1
 		and is_marketable =1
+		and goods_type = 1
 		<if test="keywords != null  and keywords != ''">
 			and (xp.keyword like '%${keywords}%'
 			or xp.name like '%${keywords}%'

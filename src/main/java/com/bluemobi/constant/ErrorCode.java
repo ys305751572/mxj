@@ -28,4 +28,6 @@ public class ErrorCode {
     public final static String ERROR_11="error_11"; // 验证码已过期，请重新发送验证码
     
     public final static String ERROR_12="error_12"; // 昵称重复
+    
+    public final static String ERROR_13="error_13"; // 商品已评价
 }

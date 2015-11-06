@@ -15,12 +15,20 @@ public class OrderVO {
 	
 	private String create_date;
 	
+	private String order_status; // 0：待支付 1：已支付 2：已取消3：已收货4：已评价
+	
 	private AddressVO address;
 	
 	private String sn;
 	
 	private List<OrderItemVO> orderItems;
 	
+	public String getOrder_status() {
+		return order_status;
+	}
+	public void setOrder_status(String order_status) {
+		this.order_status = order_status;
+	}
 	public String getSn() {
 		return sn;
 	}
