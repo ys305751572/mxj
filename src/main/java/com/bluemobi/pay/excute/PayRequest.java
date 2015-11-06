@@ -30,7 +30,7 @@ public class PayRequest {
 		//---------------------------------------------------------
 
 		//���ղƸ�֪ͨͨ��URL
-		String notify_url = "http://121.40.120.10:8080/api/pay/notifyWeixin";
+		String notify_url = "http://121.40.120.10:8080/mxj/api/pay/notifyWeixin";
 
 		//---------------��ɶ����� ��ʼ------------------------
 		//��ǰʱ�� yyyyMMddHHmmss

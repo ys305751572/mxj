@@ -346,7 +346,7 @@ public class XxShopServiceImpl extends BaseService {
 
 		// 删除对应的购物车数据
 		
-		deleteCart(params);
+//		deleteCart(params);
 
 		return sn;
 	}
