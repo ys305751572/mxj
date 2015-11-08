@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bluemobi.pro.service.impl.UhoemNewsServiceImpl">
+
+	<resultMap id="uhoemNewsResultMap" type="map">
+		<id property="id" column="id" />
+		<result property="title" column="title" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--   -->
+		<result property="content" column="content" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--   -->
+		<result property="distribute_time" column="distribute_time" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--   -->
+		<result property="expiration_time" column="expiration_time" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--   -->
+		<result property="is_enabled" column="is_enabled" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--   -->
+		<result property="news_type" column="news_type" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--   -->
+		<result property="create_time" column="create_time" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--   -->
+		<result property="creater" column="creater" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--   -->
+		<result property="modify_time" column="modify_time" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--   -->
+		<result property="modifier" column="modifier" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--   -->
+	</resultMap>
+	<resultMap id="pageResultMap"  type="java.util.HashMap" extends="uhoemNewsResultMap"></resultMap>
+	<resultMap id="findResultMap"  type="java.util.HashMap" extends="uhoemNewsResultMap"></resultMap>
+
+	<!-- 分页查询-->
+	<select id="page" parameterType="map" resultMap="pageResultMap">
+		SELECT
+			t.id,
+			t.title,
+			t.content,
+			t.create_time,
+			CASE
+		    WHEN 
+		    	(SELECT COUNT(*) FROM uhoem_news_isread news WHERE news.news_id = t.id AND  news.member_id = #{memberId}) &gt; 0
+		    THEN 1
+		    WHEN
+		    	(SELECT COUNT(*) FROM uhoem_news_isread news WHERE news.news_id = t.id AND  news.member_id = #{memberId}) &lt;= 0
+		    THEN 
+		    	0
+		    END 
+		    AS isread
+		FROM uhoem_news t
+		WHERE t.is_enabled=1
+		ORDER BY t.create_time desc
+	</select>
+
+	<!-- 修改公告读取状态-设为已读 -->
+	<insert id="modifyIsRead" parameterType="map">
+		INSERT INTO
+			uhoem_news_isread
+		(
+			member_id,
+			news_id
+		)
+		VALUES
+		(
+			#{memberId},
+			#{id}
+		)
+	</insert>
+</mapper> 

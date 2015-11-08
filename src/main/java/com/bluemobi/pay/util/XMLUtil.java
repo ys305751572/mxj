@@ -21,7 +21,7 @@ import org.jdom.input.SAXBuilder;
 public class XMLUtil {
 
 	/**
-	 * ����xml,���ص�һ��Ԫ�ؼ�ֵ�ԡ�����һ��Ԫ�����ӽڵ㣬��˽ڵ��ֵ���ӽڵ��xml��ݡ�
+	 * 
 	 * @param strxml
 	 * @return
 	 * @throws JDOMException

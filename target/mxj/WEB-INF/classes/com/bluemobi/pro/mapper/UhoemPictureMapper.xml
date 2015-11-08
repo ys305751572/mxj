@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bluemobi.pro.service.impl.UhoemPictureServiceImpl">
+
+	<resultMap id="uhoemPictureResultMap" type="map">
+		<id property="id" column="id" />
+		<result property="pic_no" column="pic_no" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--  图片位置编号 -->
+		<result property="pic_seq" column="pic_seq" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--  图片顺序 -->
+		<result property="pic_length" column="pic_length" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--  图片长 -->
+		<result property="pic_width" column="pic_width" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--  图片宽 -->
+		<result property="pic_name" column="pic_name" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--  图片名称 -->
+		<result property="pic_show" column="pic_show" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--   -->
+		<result property="pic_url" column="pic_url" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--  图片url -->
+		<result property="link_url" column="link_url" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--   -->
+		<result property="key" column="key" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--   -->
+		<result property="qiniu_url" column="qiniu_url" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--  七牛 -->
+		<result property="pic_size" column="pic_size" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--  图片大小(kb/mb -->
+		<result property="create_time" column="create_time" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--  创建时间 -->
+		<result property="creater" column="creater" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--  创建人 -->
+		<result property="modify_time" column="modify_time" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--  修改时间 -->
+		<result property="modifier" column="modifier" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--  修改人 -->
+	</resultMap>
+	<resultMap id="pageResultMap"  type="java.util.HashMap" extends="uhoemPictureResultMap"></resultMap>
+	<resultMap id="findResultMap"  type="java.util.HashMap" extends="uhoemPictureResultMap"></resultMap>
+
+	<!-- 条件查询-->
+	<select id="homepageAd" parameterType="map" resultMap="findResultMap">
+		SELECT
+		link_url,
+		qiniu_url,
+		pic_length,
+		pic_width
+		FROM uhoem_picture
+		where pic_no=#{pic_no}
+		order by pic_seq ASC
+	</select>
+
+</mapper> 

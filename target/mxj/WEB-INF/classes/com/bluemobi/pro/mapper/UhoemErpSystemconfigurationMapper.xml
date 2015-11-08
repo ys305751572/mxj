@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bluemobi.pro.service.impl.UhoemErpSystemconfigurationServiceImpl">
+
+	<resultMap id="uhoemErpSystemconfigurationResultMap" type="map">
+		<id property="ConfigId" column="ConfigId" />
+		<result property="SystemName" column="SystemName" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--   -->
+		<result property="Logo" column="Logo" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--   -->
+		<result property="SystemICP" column="SystemICP" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--   -->
+		<result property="IsLoginCode" column="IsLoginCode" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--   -->
+		<result property="ListPageSize" column="ListPageSize" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--   -->
+		<result property="FTPFileType" column="FTPFileType" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--   -->
+		<result property="FTPFileSize" column="FTPFileSize" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--   -->
+		<result property="FTPFileCount" column="FTPFileCount" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--   -->
+		<result property="NoticeIsSendSMS" column="NoticeIsSendSMS" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--   -->
+		<result property="NoticeIsSendEmail" column="NoticeIsSendEmail" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--   -->
+		<result property="SMSFailedMaxSum" column="SMSFailedMaxSum" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--   -->
+		<result property="EmailFailedMaxSum" column="EmailFailedMaxSum" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--   -->
+		<result property="ResetDefaultPassword" column="ResetDefaultPassword" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--   -->
+		<result property="basic_yz_price" column="basic_yz_price" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--   -->
+		<result property="ModifiedUserId" column="ModifiedUserId" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--   -->
+		<result property="ModifiedUserName" column="ModifiedUserName" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--   -->
+		<result property="ModifiedDate" column="ModifiedDate" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--   -->
+	</resultMap>
+	<resultMap id="pageResultMap"  type="java.util.HashMap" extends="uhoemErpSystemconfigurationResultMap"></resultMap>
+	<resultMap id="findResultMap"  type="java.util.HashMap" extends="uhoemErpSystemconfigurationResultMap"></resultMap>
+
+	<!-- 条件查询-->
+	<select id="basicYzPrice" parameterType="map" resultMap="findResultMap">
+		SELECT
+			ROUND(basic_yz_price,1) AS basic_yz_price
+		FROM uhoem_erp_systemconfiguration
+		limit 1
+	</select>
+
+
+
+</mapper> 

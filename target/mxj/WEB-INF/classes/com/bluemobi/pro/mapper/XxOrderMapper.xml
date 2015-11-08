@@ -1,0 +1,324 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bluemobi.pro.service.impl.XxShopServiceImpl">
+	
+	<resultMap type="com.bluemobi.pro.entity.OrderVO" id="findOrderByMemberId">
+		<id column="oid" property="id"/>
+		<result column="order_status" property="order_status"/>
+		<result column="expire" property="expire"/>
+		<result column="create_date" property="create_date"/>
+		<result column="sn" property="sn"/>
+		<association property="address" javaType="com.bluemobi.pro.entity.AddressVO">
+			<result column="address" property="address"/>
+			<result column="area_name" property="area_name"/>
+			<result column="consignee" property="consignee"/>
+			<result column="phone" property="phone"/>
+			<result column="zip_code" property="zip_code"/>
+			<result column="area" property="area"/>
+		</association>
+		<collection property="orderItems" ofType="com.bluemobi.pro.entity.OrderItemVO">
+			<id column="oiid" property="id"/>
+			<result column="quantity" property="product_quantity"/>
+			<result column="full_name" property="name"/>
+			<result column="price" property="price"/>
+			<result column="thumbnail" property="image"/>
+		</collection>
+	</resultMap>
+	
+	<!-- 创建订单 -->	
+	<insert id="insertOrder" parameterType="map" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO
+			xx_order
+		(
+			create_date,
+			modify_date,
+			
+			address,
+			amount_paid,
+			area_name,
+			consignee,
+			coupon_discount,
+			expire,
+			fee,
+			freight,
+			invoice_title,
+			is_allocated_stock,
+			is_invoice,
+			lock_expire,
+			memo,
+			offset_amount,
+			order_status,
+			payment_method_name,
+			payment_status,
+			phone,
+			point,
+			promotion,
+			promotion_discount,
+			shipping_method_name,
+			shipping_status,
+			sn,
+			tax,
+			zip_code,
+			area,
+			coupon_code,
+			member,
+			operator,
+			payment_method,
+			shipping_method,
+			is_common,
+			business_member
+		)
+		VALUES
+		(
+			#{create_date},
+			#{modify_date},
+			
+			#{address},
+			#{amount_paid},
+			#{area_name},
+			#{consignee},
+			#{coupon_discount},
+			#{expire},
+			#{fee},
+			#{freight},
+			#{invoice_title},
+			#{is_allocated_stock},
+			#{is_invoice},
+			#{lock_expire},
+			#{memo},
+			#{offset_amount},
+			#{order_status},
+			#{payment_method_name},
+			#{payment_status},
+			#{phone},
+			#{point},
+			#{promotion},
+			#{promotion_discount},
+			#{shipping_method_name},
+			#{shipping_status},
+			#{sn},
+			#{tax},
+			#{zip_code},
+			#{area},
+			#{coupon_code},
+			#{member},
+			#{operator},
+			#{payment_method},
+			#{shipping_method},
+			#{is_common},
+			#{business_member}
+		)
+	</insert>
+	
+	<!-- 创建订单项 -->
+	<insert id="insertOrderItems" parameterType="map">
+		INSERT INTO
+			xx_order_item
+		(
+			create_date,
+			modify_date,
+			
+			full_name,
+			is_gift,
+			name,
+			price,
+			quantity,
+			return_quantity,
+			shipped_quantity,
+			sn,
+			thumbnail,
+			weight,
+			orders,
+			product,
+			cart_item_id
+		)
+		VALUES
+		(
+			#{create_date},
+			#{modify_date},
+			
+			#{full_name},
+			#{is_gift},
+			#{name},
+			#{price},
+			#{quantity},
+			#{return_quantity},
+			#{shipped_quantity},
+			#{sn},
+			#{thumbnail},
+			#{weight},
+			#{orders},
+			#{product},
+			#{cart_item_id}
+		)
+	</insert>
+	
+	<!-- 付款回调修改订单状态 -->
+	<update id="motifyOrderStatus" parameterType="map">
+		UPDATE
+			xx_order u
+		<set>
+			<if test="order_status != null and order_status != ''"> u.order_status = #{order_status}, </if>
+			<if test="payment_status != null and payment_status != ''"> u.payment_status = #{payment_status} ,</if>
+			<if test="shipping_status != null and shipping_status != ''"> u.shipping_status = #{shipping_status} ,</if>
+		</set>
+		WHERE
+			1 = 1
+		AND
+			id = #{orderId}
+	</update>
+	
+	<!-- 查询订单列表-->
+	<select id="findOrderByMemberId" parameterType="map" resultType="map">
+		SELECT
+			u.id,
+			u.create_date,
+			u.expire,
+			u.sn,
+			u.order_status
+		FROM
+			xx_order u 
+		WHERE
+			u.member  = #{memberId}
+		<if test="type == 3">
+			AND
+				u.order_status IN (3,4)
+		</if>
+		<if test="type != 3">
+			AND
+				u.order_status = #{type}
+		</if>
+		ORDER BY
+			u.id DESC
+	</select>
+	
+	<!-- 查询订单详情 -->
+	<select id="findOrderDetail" parameterType="map" resultType="map">
+		SELECT
+			u.id,
+			u.address,
+			u.area_name,
+			u.phone,
+			u.consignee,
+			u.zip_code,
+			u.area,
+			u.expire,
+			u.create_date,
+			u.sn
+		FROM
+			xx_order u 
+		WHERE
+			u.id = #{orderId}
+	</select>
+	
+	<select id="listItem" resultType="map">
+		SELECT
+			oi.product id,
+			xp.product_main_category,
+			oi.quantity product_quantity,
+			oi.full_name name,
+			oi.price,
+			IFNULL(oi.thumbnail,"") image,
+			oi.orders
+		FROM
+			xx_order_item oi,
+			xx_product xp
+		WHERE	
+			oi.product = xp.id
+		AND
+			oi.orders 
+		IN
+			<foreach collection="list" item="orderIds" open="(" separator="," close=")">
+				#{orderIds}
+			</foreach>
+	</select>
+	
+	<!-- 根据支付方式ID查询支付方式名称 -->
+	<select id="findPaymementMethodNameById" parameterType="String" resultType="map">
+		SELECT
+			name
+		FROM
+			xx_payment_method 
+		WHERE
+			id = #{paymentMethodId}
+	</select>
+	
+	<!-- 根据派送方式ID查询派送方式名称 -->
+	<select id="findShipmementMethodNameById" parameterType="String" resultType="map">
+		SELECT
+			name
+		FROM
+			xx_shipping_method 
+		WHERE
+			id = #{shippingMethodId}
+	</select>
+	
+	<!-- 删除订单 -->
+	<delete id="deleteOrder" parameterType="map">
+		DELETE FROM
+			xx_order
+		WHERE
+			id = #{orderId}
+	</delete>
+	
+	<!-- 删除订单项 -->
+	<select id="deleteOrderItem" parameterType="map">
+		DELETE FROM
+			xx_order_item
+		WHERE	
+			orders = #{orderId}
+	</select>
+	
+	<!-- 修改订单 -->
+	<update id="motifyOrder" parameterType="map">
+		UPDATE
+			xx_order o
+		<set>
+			<if test="address != null and address != ''">o.address = #{address},</if>
+			<if test="area_name != null and area_name != ''">o.area_name = #{area_name},</if>
+			<if test="consignee != null and consignee != ''">o.consignee = #{consignee},</if>
+			<if test="expire != null and expire != ''">o.expire = #{expire},</if>
+			<if test="phone != null and phone != ''">o.phone = #{phone},</if>
+			<if test="zip_code != null and zip_code != ''">o.zip_code = #{zip_code},</if>
+			<if test="area != null and area != ''">o.area = #{area},</if>
+		</set>
+		WHERE
+			o.id = #{orderId}
+	</update>
+	
+	<!-- 根据订单号获取订单信息 -->
+	<select id="findOrderBySn" parameterType="string" resultType="map">
+		SELECT	
+		    o.id,
+			o.sn,
+			o.payment_method_name,
+			o.expire,
+			o.member
+		FROM
+			xx_order o
+		WHERE
+			o.sn = #{sn}
+	</select>
+	
+	<!-- 根据订单ID获取订单项列表 -->
+	<select id="findOrderItemByOrderId" parameterType="long" resultType="map">
+		SELECT
+			oi.price
+		FROM
+			xx_order_item oi
+		WHERE
+			oi.orders = #{orderId}
+	</select>
+	
+	<!-- 根据订单号查询交易记录 -->
+	<select id="findPaymentBySn" parameterType="string" resultType="map">
+		SELECT
+			p.id
+		FROM
+			xx_payment p
+		WHERE
+			p.sn = #{sn}
+	</select>
+</mapper> 

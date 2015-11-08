@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bluemobi.pro.service.impl.UhoemErpPlanProductServiceImpl">
+
+	<resultMap id="uhoemErpPlanProductResultMap" type="map">
+		<id property="id" column="id" />
+		<result property="planid" column="planid" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--  方案Id -->
+		<result property="product" column="product" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--  产品Id -->
+		<result property="is_apply" column="is_apply" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--  是否应用 -->
+		<result property="quantity" column="quantity" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--  是否应用 -->
+		<result property="create_user" column="create_user" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--  创建人 -->
+		<result property="create_date" column="create_date" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--  创建日期 -->
+		<result property="modify_user" column="modify_user" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--  修改人 -->
+		<result property="modify_date" column="modify_date" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--  修改日期 -->
+	</resultMap>
+	<resultMap id="pageResultMap"  type="java.util.HashMap" extends="uhoemErpPlanProductResultMap"></resultMap>
+	<resultMap id="findResultMap"  type="java.util.HashMap" extends="uhoemErpPlanProductResultMap"></resultMap>
+
+	<!-- 新增 -->
+	<insert id="insert" parameterType="map" useGeneratedKeys="true"
+			keyProperty="id">
+		INSERT INTO uhoem_erp_plan_product (
+		<if test="planid != null ">
+			planid,
+		</if>
+		<if test="product != null ">
+			product,
+		</if>
+		<if test="is_apply != null ">
+			is_apply,
+		</if>
+		<if test="quantity != null ">
+			quantity,
+		</if>
+		<if test="create_user != null ">
+			create_user,
+		</if>
+		<if test="create_date != null ">
+			create_date,
+		</if>
+		<if test="modify_user != null ">
+			modify_user,
+		</if>
+		<if test="modify_date != null ">
+			modify_date,
+		</if>
+		id
+		) VALUES (
+		<if test="planid != null ">
+			#{planid},
+		</if>
+		<if test="product != null ">
+			#{product},
+		</if>
+		<if test="is_apply != null ">
+			#{is_apply},
+		</if>
+		<if test="quantity != null ">
+			#{quantity},
+		</if>
+		<if test="create_user != null ">
+			#{create_user},
+		</if>
+		<if test="create_date != null ">
+			#{create_date},
+		</if>
+		<if test="modify_user != null ">
+			#{modify_user},
+		</if>
+		<if test="modify_date != null ">
+			#{modify_date},
+		</if>
+		0
+		)
+	</insert>
+
+	<!-- 条件查询-->
+	<select id="findByPlanAndProductMainCategory" parameterType="map" resultMap="findResultMap">
+		SELECT
+		xp.id,
+		xp.name,
+		uepp.quantity,
+		ROUND(xp.price,1) AS price
+		FROM uhoem_erp_plan_product uepp
+		left JOIN xx_product xp on xp.id = uepp.product
+		where uepp.planid = #{planid}
+			and xp.product_main_category=#{product_main_category}
+	</select>
+
+	<!-- 删除-->
+	<delete id="deleteByPlanid" parameterType="map">
+		DELETE FROM
+			uhoem_erp_plan_product
+		WHERE
+		planid=#{planid}
+	</delete>
+
+
+
+</mapper> 

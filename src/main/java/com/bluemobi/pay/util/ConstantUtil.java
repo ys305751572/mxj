@@ -18,7 +18,7 @@ public class ConstantUtil {
 	public static String PARTNER = "1269932701";// �ͻ�
 	
 //	public static String PARTNER_KEY = "8934e7d15453e97507ef794cf7b0519d";//�̻��Ŷ�Ӧ����Կ
-	public static String API_KEY = "Uhoem20151008123weixin4000279600";//�̻�
+	public static String API_KEY =     "Uhoem20151008123weixin4000279600";//�̻�
 	public static String TOKENURL = "https://api.weixin.qq.com/cgi-bin/token";//��ȡaccess_token��Ӧ��url
 	public static String GRANT_TYPE = "client_credential";//�����̶�ֵ 
 	public static String EXPIRE_ERRCODE = "42001";//access_tokenʧЧ�����󷵻ص�errcode

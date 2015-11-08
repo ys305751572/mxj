@@ -350,28 +350,6 @@ public class XxShopServiceImpl extends BaseService {
 
 		return sn;
 	}
-	
-	/**
-	 * 删除购物车
-	 * @param params
-	 */
-	private void deleteCart(Map<String, Object> params) {
-		long memberId = Long.parseLong(params.get("memberId").toString());
-		String productIdstr = params.get("productIds") == null ? "" : params.get("productIds").toString();
-		if (StringUtils.isNotBlank(productIdstr)) {
-			String[] productIds = productIdstr.split("\\|");
-			Map<String, Object> cartMap = new HashMap<String, Object>();
-			cartMap.put("memberId", memberId);
-			try {
-				for (String product : productIds) {
-					cartMap.put("productId", product.split(",")[0]);
-					this.getBaseDao().delete(PRIFIX + ".deleteCartByProductId", cartMap);
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-	}
 
 	private void createOrderItems(Map<String, Object> params, Object id) throws NumberFormatException, Exception {
 
@@ -412,9 +390,10 @@ public class XxShopServiceImpl extends BaseService {
 		orderItem.put("quantity", params.get("quantity"));
 
 		orderItem.put("product", params.get("productId"));
-		if (params.get("cartItemId") != null) {
-			orderItem.put("cart_item_id", params.get("cartId"));
-		}
+		// 根据产品ID。用户ID查询对应的xx_cart_item.id字段
+		Integer cartItemId = this.getBaseDao().getObject(PRIFIX + ".findCartItemIdByPrductIdAndMemberId", params);
+		orderItem.put("cart_item_id", cartItemId);
+		
 		this.getBaseDao().save(PRIFIX + ".insertOrderItems", orderItem);
 	}
 
@@ -434,6 +413,33 @@ public class XxShopServiceImpl extends BaseService {
 		this.getBaseDao().update(PRIFIX + ".motifyOrder", params);
 	}
 
+	
+	/**
+	 * TODO
+	 * 删除购物车
+	 * @param params
+	 * @throws Exception 
+	 */
+	public void deleteCart(String sn) throws Exception {
+//		long memberId = Long.parseLong(params.get("memberId").toString());
+//		String productIdstr = params.get("productIds") == null ? "" : params.get("productIds").toString();
+//		if (StringUtils.isNotBlank(productIdstr)) {
+//			String[] productIds = productIdstr.split("\\|");
+//			Map<String, Object> cartMap = new HashMap<String, Object>();
+//			cartMap.put("memberId", memberId);
+//			try {
+//				for (String product : productIds) {
+//					cartMap.put("productId", product.split(",")[0]);
+//					this.getBaseDao().delete(PRIFIX + ".deleteCartByProductId", cartMap);
+//				}
+//			} catch (Exception e) {
+//				e.printStackTrace();
+//			}
+//		}
+		this.getBaseDao().delete(PRIFIX + ".deleteCortItemBySn", sn);
+		
+	}
+	
 	// 查询商品评价
 	public Page findCommentByProductId(Map<String, Object> params) throws Exception {
 		int currentPage = (params.get("pageNum") == null ? 0 : Integer.parseInt(params.get("pageNum").toString()) - 1);
@@ -735,19 +741,39 @@ public class XxShopServiceImpl extends BaseService {
 		String sn = request.getParameter("out_trade_no").toString(); // 订单号
 		if ("SUCCESS".equals(status) || "FINISH".equals(status)) {
 			savePayment(sn);
+			deleteCart(sn);
 		}
 	}
 
-	public void toEntityByWeixin(HttpServletRequest request) throws Exception {
-
-		String sn = request.getParameter("out_trade_no");
-		String status = request.getParameter("result_code");
-
+	@Transactional
+	public void toEntityByWeixin(Map<String,Object> resultMap) throws Exception {
+		
+		String status = resultMap.get("result_code").toString();
 		if ("SUCCESS".equals(status)) {
+			String sn = resultMap.get("out_trade_no").toString();
 			savePayment(sn);
+			deleteCart(sn);
 		}
 	}
 
+	/**
+	 * 根据订单号计算总价
+	 * @param sn
+	 * @return
+	 * @throws Exception
+	 */
+	public Double countPrice(String sn) throws Exception {
+		double price = 0.0;
+		List<Map<String, Object>> ordetItems = this.getBaseDao().getList(PRIFIX + ".findOrderItemByOrderId",
+				sn);
+		for (Map<String, Object> map : ordetItems) {
+			if (map.get("price") != null) {
+				price += Double.parseDouble(map.get("price").toString());
+			}
+		}
+		return Double.valueOf(price);
+	}
+	
 	// 创建记录对象
 	@Transactional
 	public Payment savePayment(String sn) throws Exception {
@@ -783,7 +809,7 @@ public class XxShopServiceImpl extends BaseService {
 					payment.setFee(0.0);
 					payment.setAmount(price);
 					payment.setPaymentPluginId("alipayBankPlugin");
-					payment.setExpire(orderMap.get("expire") == null ? "" : orderMap.get("expire").toString());
+					payment.setExpire(orderMap.get("expire") == null ? null : orderMap.get("expire").toString());
 					payment.setOrders(Long.parseLong(orderMap.get("id").toString()));
 					payment.setMember(
 							orderMap.get("member") == null ? 0L : Long.parseLong(orderMap.get("member").toString()));
@@ -795,6 +821,7 @@ public class XxShopServiceImpl extends BaseService {
 			opMap.put("operation", Constant.ORDER_PAY);
 			opMap.put("orderId", orderMap.get("id"));
 			this.operationOrder(opMap);
+			
 		}
 		return payment;
 	}

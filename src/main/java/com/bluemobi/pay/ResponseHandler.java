@@ -57,6 +57,7 @@ public class ResponseHandler {
 		this.uriEncoding = "";
 
 		Map m = this.request.getParameterMap();
+		System.out.println("weixin_map:" + m + ":size" + m.size());
 		Iterator it = m.keySet().iterator();
 		while (it.hasNext()) {
 			String k = (String) it.next();
@@ -135,6 +136,7 @@ public class ResponseHandler {
 		String sign = MD5Util.MD5Encode(sb.toString(), enc).toLowerCase();
 		
 		String tenpaySign = this.getParameter("sign").toLowerCase();
+		System.out.println("=>sign:"+ sign + " => tenpaySign" + tenpaySign);
 		
 		//debug��Ϣ
 		this.setDebugInfo(sb.toString() + " => sign:" + sign +

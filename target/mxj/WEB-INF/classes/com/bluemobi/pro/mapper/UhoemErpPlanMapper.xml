@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bluemobi.pro.service.impl.UhoemErpPlanServiceImpl">
+
+	<resultMap id="uhoemErpPlanResultMap" type="map">
+		<id property="id" column="id" />
+		<result property="plan_name" column="plan_name" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--  方案名称 -->
+		<result property="house_type" column="house_type" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--  户型 -->
+		<result property="price" column="price" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--  单价 -->
+		<result property="covered_area" column="covered_area" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--  面积 -->
+		<result property="covered_price" column="covered_price" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--   -->
+		<result property="total_price" column="total_price" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--  总价 -->
+		<result property="erp_user" column="erp_user" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--  工作人员Id -->
+		<result property="member" column="member" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--  会员Id -->
+		<result property="is_member_create" column="is_member_create" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--  是否会员创建 -->
+		<result property="create_date" column="create_date" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--  创建日期 -->
+		<result property="modify_date" column="modify_date" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--  修改日期 -->
+		<result property="face_image" column="face_image" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--  修改日期 -->
+	</resultMap>
+	<resultMap id="pageResultMap"  type="java.util.HashMap" extends="uhoemErpPlanResultMap"></resultMap>
+	<resultMap id="findResultMap"  type="java.util.HashMap" extends="uhoemErpPlanResultMap"></resultMap>
+
+	<!-- 新增 -->
+	<insert id="insert" parameterType="map" useGeneratedKeys="true"
+			keyProperty="id">
+		INSERT INTO uhoem_erp_plan (
+		<if test="plan_name != null ">
+			plan_name,
+		</if>
+		<if test="house_type != null ">
+			house_type,
+		</if>
+		<if test="price != null ">
+			price,
+		</if>
+		<if test="covered_area != null ">
+			covered_area,
+		</if>
+		<if test="covered_price != null ">
+			covered_price,
+		</if>
+		<if test="total_price != null ">
+			total_price,
+		</if>
+		<if test="erp_user != null ">
+			erp_user,
+		</if>
+		<if test="member != null ">
+			member,
+		</if>
+		<if test="is_member_create != null ">
+			is_member_create,
+		</if>
+		<if test="create_date != null ">
+			create_date,
+		</if>
+		<if test="modify_date != null ">
+			modify_date,
+		</if>
+		id
+		) VALUES (
+		<if test="plan_name != null ">
+			#{plan_name},
+		</if>
+		<if test="house_type != null ">
+			#{house_type},
+		</if>
+		<if test="price != null ">
+			#{price},
+		</if>
+		<if test="covered_area != null ">
+			#{covered_area},
+		</if>
+		<if test="covered_price != null ">
+			#{covered_price},
+		</if>
+		<if test="total_price != null ">
+			#{total_price},
+		</if>
+		<if test="erp_user != null ">
+			#{erp_user},
+		</if>
+		<if test="member != null ">
+			#{member},
+		</if>
+		<if test="is_member_create != null ">
+			#{is_member_create},
+		</if>
+		<if test="create_date != null ">
+			#{create_date},
+		</if>
+		<if test="modify_date != null ">
+			#{modify_date},
+		</if>
+		0
+		)
+	</insert>
+
+	<!-- 修改 -->
+	<update id="update" parameterType="map">
+		UPDATE uhoem_erp_plan SET
+		<if test="id != null  and id != ''">
+			id=#{id}
+		</if>
+		<if test="plan_name != null  and plan_name != ''">
+			, plan_name=#{plan_name}
+		</if>
+		<if test="house_type != null  and house_type != ''">
+			, house_type=#{house_type}
+		</if>
+		<if test="price != null  and price != ''">
+			, price=#{price}
+		</if>
+		<if test="covered_area != null  and covered_area != ''">
+			, covered_area=#{covered_area}
+		</if>
+		<if test="covered_price != null  and covered_price != ''">
+			, covered_price=#{covered_price}
+		</if>
+		<if test="total_price != null  and total_price != ''">
+			, total_price=#{total_price}
+		</if>
+		<if test="erp_user != null  and erp_user != ''">
+			, erp_user=#{erp_user}
+		</if>
+		<if test="member != null  and member != ''">
+			, member=#{member}
+		</if>
+		<if test="is_member_create != null  and is_member_create != ''">
+			, is_member_create=#{is_member_create}
+		</if>
+		<if test="create_date != null  and create_date != ''">
+			, create_date=#{create_date}
+		</if>
+		<if test="modify_date != null  and modify_date != ''">
+			, modify_date=#{modify_date}
+		</if>
+		WHERE
+		id=#{id}
+	</update>
+
+	<!-- 条件查询-->
+	<select id="findMyPlan" parameterType="map" resultMap="findResultMap">
+		SELECT
+			plan.id,
+			plan.plan_name,
+			plan.house_type,
+			ROUND(plan.price,1) AS price,
+			ROUND(plan.covered_area,1) AS covered_area,
+			ROUND(plan.covered_price,1) AS covered_price,
+			ROUND(plan.total_price,1) AS total_price,
+			plan.erp_user,
+			plan.member,
+			plan.is_member_create,
+			plan.create_date,
+			plan.modify_date,
+			umember.face_image
+			FROM uhoem_erp_plan plan
+			LEFT JOIN uhoem_member umember ON umember.id = plan.member
+				where plan.member=#{member}
+				and plan.is_member_create=1
+				and  plan.erp_user = 0
+	</select>
+
+	<!-- 查询其他方案 -->
+	<select id="findOtherPlan" parameterType="map" resultMap="findResultMap">
+		SELECT
+			plan.id,
+			plan.plan_name,
+			plan.house_type,
+			ROUND(plan.price,1) AS price,
+			ROUND(plan.covered_area,1) AS covered_area,
+			ROUND(plan.covered_price,1) AS covered_price,
+			ROUND(plan.total_price,1) AS total_price,
+			plan.erp_user,
+			plan.member,
+			plan.is_member_create,
+			plan.create_date,
+			plan.modify_date,
+			umember.face_image
+		FROM uhoem_erp_plan plan
+		LEFT JOIN uhoem_member umember ON umember.id = plan.member
+		WHERE plan.erp_user != 0
+		and plan.is_member_create=0
+		and plan.member = 3
+		limit 1
+	</select>
+
+</mapper> 

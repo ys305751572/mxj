@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bluemobi.pro.service.impl.XxCommonsServiceImpl">
+
+	<!-- 查询街道 -->
+	<select id="findStreet" parameterType="map" resultType="map">
+		SELECT
+		a.id,
+		a.name
+		FROM
+		xx_area a
+		WHERE
+		a.parent = #{areaId}
+		ORDER BY
+		a.orders
+	</select>
+
+	<!-- 查询首页分类图片 -->
+	<select id="findIndexImages" resultType="map">
+		SELECT
+		p.`pic_seq` type,
+		p.`link_url` linkUrl
+		FROM
+		uhoem_picture p
+		WHERE
+		p.pic_no = 5
+		AND
+		p.pic_seq
+		IN
+		(3,4,5,6)
+	</select>
+
+	<!-- 获取未读消息数 -->
+	<select id="countMessages" parameterType="map" resultType="int">
+		SELECT
+			COUNT(m.id)
+		FROM
+			uhoem_messages m
+		LEFT JOIN uhoem_message_status ms ON ms.message_id = m.id
+		WHERE ms.`status`=1
+		and m.isread = 0
+		and ms.memberid=#{memberId}
+	</select>
+
+	<!-- 获取未读通知数 -->
+	<select id="countNews" parameterType="map" resultType="int">
+		SELECT
+			COUNT(*)
+		FROM
+			uhoem_news news
+		WHERE 
+			news.is_enabled = 1
+		AND
+			news.`id` NOT IN
+			(SELECT
+			 	ir.`news_id`
+			 FROM
+				uhoem_news_isread ir
+			 WHERE ir.`member_id` = #{memberId})
+	</select>
+</mapper> 

@@ -1,0 +1,312 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace必须指向Dao接口 -->
+<mapper namespace="com.bluemobi.sys.service.impl.SysuserServiceImpl">
+
+	<resultMap id="sysuserResultMap" type="java.util.HashMap">
+		<id property="id" column="id" />
+		<result property="code" column="code" />
+		<result property="name" column="name" />
+		<result property="password" column="password" />
+		<result property="sex" column="sex" />
+		<result property="job" column="job" />
+		<result property="jobnumber" column="jobnumber" />
+		<result property="hospitalAccess" column="hospitalAccess" />
+		<result property="userAccess" column="userAccess" />
+		<result property="updateTime" column="updateTime" />
+		<result property="departmentAccess" column="departmentAccess" />
+		<result property="physicalcenterAccess" column="physicalcenterAccess" />
+		<result property="doctorAccess" column="doctorAccess" />
+		<result property="departmenttypeAccess" column="departmenttypeAccess" />
+		<result property="medicaltypeAccess" column="medicaltypeAccess" />
+		<result property="replyAccess" column="replyAccess" />
+		<result property="allAccess" column="allAccess" />
+	</resultMap>
+	<resultMap id="pageResultMap"  type="java.util.HashMap" extends="sysuserResultMap"></resultMap>
+	<resultMap id="findResultMap"  type="java.util.HashMap" extends="sysuserResultMap"></resultMap>
+
+	<!-- 新增 -->
+	<insert id="insert" parameterType="map" useGeneratedKeys="true"
+		keyProperty="id">
+		INSERT INTO sysuser (
+	    <if test="code != null and code != ''">
+	    	code,
+	   	</if>
+	    <if test="name != null and name != ''">
+	    	name,
+	   	</if>
+	    <if test="password != null  and password != ''">
+	    	password,
+	   	</if>
+	    <if test="sex != null and sex != ''">
+	    	sex,
+	   	</if>
+	    <if test="job != null  and job !=''">
+	    	job,
+	   	</if>
+	   	<if test="jobnumber != null  and jobnumber !=''">
+	    	jobnumber,
+	   	</if>
+	   	<if test="hospitalAccess != null  and hospitalAccess !=''">
+	    	hospitalAccess,
+	   	</if>
+	   	<if test="userAccess != null  and userAccess !=''">
+	    	userAccess,
+	   	</if>
+	   	<if test="updateTime != null  and updateTime !=''">
+	    	updateTime,
+	   	</if>
+	   	<if test="departmentAccess != null  and departmentAccess !=''">
+	    	departmentAccess,
+	   	</if>
+	   	<if test="physicalcenterAccess != null  and physicalcenterAccess !=''">
+	    	physicalcenterAccess,
+	   	</if>
+	   	<if test="doctorAccess != null  and doctorAccess !=''">
+	    	doctorAccess,
+	   	</if>
+	   	<if test="departmenttypeAccess != null  and departmenttypeAccess !=''">
+	    	departmenttypeAccess,
+	   	</if>
+	   	<if test="medicaltypeAccess != null  and medicaltypeAccess !=''">
+	    	medicaltypeAccess,
+	   	</if>
+	   	<if test="replyAccess != null  and replyAccess !=''">
+	    	replyAccess,
+	   	</if>
+	   	<if test="allAccess != null  and allAccess !=''">
+	    	allAccess,
+	   	</if>
+	   		id
+		) VALUES (
+		<if test="code != null and code != ''">
+		    #{code},
+		</if>
+		<if test="name != null and name != ''">
+		    #{name},
+		</if>
+		<if test="password != null and password != ''">
+		    #{password},
+		</if>
+		<if test="sex != null and sex != ''">
+		    #{sex},
+		</if>
+		<if test="job != null and job != ''">
+		    #{job},
+		</if>
+		<if test="jobnumber != null and jobnumber != ''">
+		    #{jobnumber},
+		</if>
+		<if test="hospitalAccess != null and hospitalAccess != ''">
+		    #{hospitalAccess},
+		</if>
+		<if test="userAccess != null and userAccess != ''">
+		    #{userAccess},
+		</if>
+		<if test="updateTime != null and updateTime != ''">
+		    #{updateTime},
+		</if>
+		<if test="departmentAccess != null and departmentAccess != ''">
+		    #{departmentAccess},
+		</if>
+		<if test="physicalcenterAccess != null and physicalcenterAccess != ''">
+		    #{physicalcenterAccess},
+		</if>
+		<if test="doctorAccess != null and doctorAccess != ''">
+		    #{doctorAccess},
+		</if>
+		<if test="departmenttypeAccess != null and departmenttypeAccess != ''">
+		    #{departmenttypeAccess},
+		</if>
+		<if test="medicaltypeAccess != null and medicaltypeAccess != ''">
+		    #{medicaltypeAccess},
+		</if>
+		<if test="replyAccess != null and replyAccess != ''">
+		    #{replyAccess},
+		</if>
+		<if test="allAccess != null and allAccess != ''">
+		    #{allAccess},
+		</if>
+			0
+		)
+	</insert>
+
+	<update id="update" parameterType="map">
+	   update sysuser set
+	     <if test="id != null and id != ''">
+	        id=#{id}
+	     </if>
+	     <if test="code != null and code != ''">
+	        , code=#{code}
+	     </if>
+	     <if test="name != null and name != ''">
+	        , name=#{name}
+	     </if>
+	     <if test="password != null and password != ''">
+	        , password=#{password}
+	     </if>
+	     <if test="sex != null and sex != ''">
+	        , sex=#{sex}
+	     </if>
+	     <if test="job != null and job != ''">
+	        , job=#{job}
+	     </if>
+	     <if test="jobnumber != null and jobnumber != ''">
+	        , jobnumber=#{jobnumber}
+	     </if>
+	     <if test="hospitalAccess != null and hospitalAccess != ''">
+	        , hospitalAccess=#{hospitalAccess}
+	     </if>
+	     <if test="userAccess != null and userAccess != ''">
+	        , userAccess=#{userAccess}
+	     </if>
+	     <if test="updateTime != null and updateTime != ''">
+	        , updateTime=#{updateTime}
+	     </if>
+	     <if test="departmentAccess != null and departmentAccess != ''">
+	        , departmentAccess=#{departmentAccess}
+	     </if>
+	     <if test="physicalcenterAccess != null and physicalcenterAccess != ''">
+	        , physicalcenterAccess=#{physicalcenterAccess}
+	     </if>
+	     <if test="doctorAccess != null and doctorAccess != ''">
+	        , doctorAccess=#{doctorAccess}
+	     </if>
+	     <if test="departmenttypeAccess != null and departmenttypeAccess != ''">
+	        , departmenttypeAccess=#{departmenttypeAccess}
+	     </if>
+	     <if test="medicaltypeAccess != null and medicaltypeAccess != ''">
+	        , medicaltypeAccess=#{medicaltypeAccess}
+	     </if>
+	     <if test="replyAccess != null and replyAccess != ''">
+	        , replyAccess=#{replyAccess}
+	     </if>
+	     <if test="allAccess != null and allAccess != ''">
+	        , allAccess=#{allAccess}
+	     </if>
+	   where 
+	    id=#{id} 
+	</update>
+
+	<delete id="delete" parameterType="map">
+	   delete from 
+	     sysuser 
+	   where 
+	    id=#{id} 
+	</delete>
+	
+	<select id="get" parameterType="map" resultType="java.util.HashMap">
+	    select 
+	     id,
+	     name,
+	     password
+	   from sysuser
+	   <where>
+	     <if test="id != null">
+	        id=#{id}
+	     </if>
+	     <if test="name != null">
+	        and name=#{name}
+	     </if>
+	     <if test="password != null">
+	        and password=#{password}
+	     </if>
+	   </where>
+	</select>
+
+	<select id="findOne" parameterType="map" resultType="java.util.HashMap">
+	   select 
+	    id,
+	    code,
+	    name,
+	    sex,
+	     doctorAccess,
+	     physicalcenterAccess,
+	     departmentAccess,
+	     userAccess,
+	     hospitalAccess,
+	     departmenttypeAccess,
+	     medicaltypeAccess,
+	     replyAccess,
+	     allAccess,
+	     job,
+	     jobnumber
+	   from sysuser
+	   where 
+	    id=#{id} 
+	</select>
+	<!-- 验证密码是否正确 -->
+	<select id="checkpassword" parameterType="map" resultType="java.util.HashMap">
+	   select 
+	     id,
+	     name,
+	     password
+	   from sysuser
+	   <where>
+	     <if test="id != null and id != ''">
+	        id=#{id}
+	     </if>
+	     <if test="oldpassword != null and oldpassword != ''">
+	        and password=#{oldpassword}
+	     </if>
+	   </where>
+	</select>
+	
+	<select id="page" parameterType="map" resultType="java.util.HashMap">
+	   select 
+	     id,
+	     code,
+	     name,
+	     password,
+	     case
+	     	when sex = '0' then '男'
+	     	when sex = '1' then '女'
+	     end as sex,
+	     job,
+	     jobnumber,
+	     (SELECT FROM_UNIXTIME( SUBSTRING(updateTime,1,10), '%Y-%m-%d %H:%i:%s' )) as updateTime	
+	   from sysuser
+	   <where>
+	     <if test="id != null">
+	        id=#{id}
+	     </if>
+	     <if test="code != null and code != ''">
+	        and code like '%${code}%'
+	     </if>
+	     <if test="name != null and name != ''">
+	        and name like '%${name}%'
+	     </if>
+	   </where>
+	   order by updateTime desc
+	</select>
+	
+	<select id="getLogin" parameterType="map" resultType="java.util.HashMap">
+	    select 
+	     id,
+	     name,
+	     doctorAccess,
+	     physicalcenterAccess,
+	     departmentAccess,
+	     userAccess,
+	     hospitalAccess,
+	     departmenttypeAccess,
+	     medicaltypeAccess,
+	     replyAccess,
+	     allAccess,
+	     password
+	   from sysuser
+	  where 
+	         code=#{name}
+	        and password=#{password}
+	</select>
+	<select id="checkcode" parameterType="map" resultType="java.util.HashMap">
+	    select 
+	     id,
+	     name,
+	     password
+	   from sysuser
+	  where 
+	         code=#{code}
+	</select>
+</mapper> 

@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bluemobi.pro.service.impl.UhoemErpDictionaryServiceImpl">
+
+	<resultMap id="uhoemErpDictionaryResultMap" type="map">
+		<id property="AutoId" column="AutoId" />
+		<result property="TypeId" column="TypeId" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--   -->
+		<result property="DicName" column="DicName" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--   -->
+		<result property="DicValue" column="DicValue" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--   -->
+		<result property="IsEnable" column="IsEnable" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--   -->
+		<result property="IsSystemHold" column="IsSystemHold" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--   -->
+		<result property="IsShow" column="IsShow" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--   -->
+		<result property="IsDelete" column="IsDelete" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--   -->
+		<result property="Descriptions" column="Descriptions" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--   -->
+		<result property="SortCode" column="SortCode" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--   -->
+		<result property="CreateUserId" column="CreateUserId" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--   -->
+		<result property="CreateUserName" column="CreateUserName" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--   -->
+		<result property="CreateDate" column="CreateDate" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--   -->
+		<result property="ModifiedUserId" column="ModifiedUserId" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--   -->
+		<result property="ModifiedUserName" column="ModifiedUserName" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--   -->
+		<result property="ModifiedDate" column="ModifiedDate" typeHandler="com.bluemobi.mybatis.StringIfNull"/> <!--   -->
+	</resultMap>
+	<resultMap id="pageResultMap"  type="java.util.HashMap" extends="uhoemErpDictionaryResultMap"></resultMap>
+	<resultMap id="findResultMap"  type="java.util.HashMap" extends="uhoemErpDictionaryResultMap"></resultMap>
+
+	<!-- 条件查询-->
+	<select id="houseType" parameterType="map" resultMap="findResultMap">
+		SELECT
+		AutoId,
+		TypeId,
+		DicName,
+		DicValue,
+		IsEnable,
+		IsSystemHold,
+		IsShow,
+		IsDelete,
+		Descriptions,
+		SortCode,
+		CreateUserId,
+		CreateUserName,
+		CreateDate,
+		ModifiedUserId,
+		ModifiedUserName,
+		ModifiedDate
+		FROM uhoem_erp_dictionary
+		<where>
+			<if test="AutoId != null and AutoId != '' ">
+				AutoId=#{AutoId}
+			</if>
+			<if test="TypeId != null and TypeId != '' ">
+				and TypeId=#{TypeId}
+			</if>
+			<if test="DicName != null and DicName != '' ">
+				and DicName=#{DicName}
+			</if>
+			<if test="DicValue != null and DicValue != '' ">
+				and DicValue=#{DicValue}
+			</if>
+			<if test="IsEnable != null and IsEnable != '' ">
+				and IsEnable=#{IsEnable}
+			</if>
+			<if test="IsSystemHold != null and IsSystemHold != '' ">
+				and IsSystemHold=#{IsSystemHold}
+			</if>
+			<if test="IsShow != null and IsShow != '' ">
+				and IsShow=#{IsShow}
+			</if>
+			<if test="IsDelete != null and IsDelete != '' ">
+				and IsDelete=#{IsDelete}
+			</if>
+			<if test="Descriptions != null and Descriptions != '' ">
+				and Descriptions=#{Descriptions}
+			</if>
+			<if test="SortCode != null and SortCode != '' ">
+				and SortCode=#{SortCode}
+			</if>
+			<if test="CreateUserId != null and CreateUserId != '' ">
+				and CreateUserId=#{CreateUserId}
+			</if>
+			<if test="CreateUserName != null and CreateUserName != '' ">
+				and CreateUserName=#{CreateUserName}
+			</if>
+			<if test="CreateDate != null and CreateDate != '' ">
+				and CreateDate=#{CreateDate}
+			</if>
+			<if test="ModifiedUserId != null and ModifiedUserId != '' ">
+				and ModifiedUserId=#{ModifiedUserId}
+			</if>
+			<if test="ModifiedUserName != null and ModifiedUserName != '' ">
+				and ModifiedUserName=#{ModifiedUserName}
+			</if>
+			<if test="ModifiedDate != null and ModifiedDate != '' ">
+				and ModifiedDate=#{ModifiedDate}
+			</if>
+		</where>
+		ORDER BY SortCode ASC
+	</select>
+
+	<!-- 条件查询-->
+	<select id="getByHourseType" parameterType="map" resultMap="findResultMap">
+		SELECT
+		AutoId,
+		TypeId,
+		DicName,
+		DicValue,
+		IsEnable,
+		IsSystemHold,
+		IsShow,
+		IsDelete,
+		Descriptions,
+		SortCode,
+		CreateUserId,
+		CreateUserName,
+		CreateDate,
+		ModifiedUserId,
+		ModifiedUserName,
+		ModifiedDate
+		FROM uhoem_erp_dictionary
+		where 1=1
+		<if test="AutoId != null and AutoId != '' ">
+			and AutoId=#{AutoId}
+		</if>
+		<if test="TypeId != null and TypeId != '' ">
+			and TypeId=#{TypeId}
+		</if>
+		<if test="DicName != null and DicName != '' ">
+			and DicName=#{DicName}
+		</if>
+		<if test="DicValue != null and DicValue != '' ">
+			and DicValue=#{DicValue}
+		</if>
+		<if test="IsEnable != null and IsEnable != '' ">
+			and IsEnable=#{IsEnable}
+		</if>
+		<if test="IsSystemHold != null and IsSystemHold != '' ">
+			and IsSystemHold=#{IsSystemHold}
+		</if>
+		<if test="IsShow != null and IsShow != '' ">
+			and IsShow=#{IsShow}
+		</if>
+		<if test="IsDelete != null and IsDelete != '' ">
+			and IsDelete=#{IsDelete}
+		</if>
+		<if test="Descriptions != null and Descriptions != '' ">
+			and Descriptions=#{Descriptions}
+		</if>
+		<if test="SortCode != null and SortCode != '' ">
+			and SortCode=#{SortCode}
+		</if>
+		<if test="CreateUserId != null and CreateUserId != '' ">
+			and CreateUserId=#{CreateUserId}
+		</if>
+		<if test="CreateUserName != null and CreateUserName != '' ">
+			and CreateUserName=#{CreateUserName}
+		</if>
+		<if test="CreateDate != null and CreateDate != '' ">
+			and CreateDate=#{CreateDate}
+		</if>
+		<if test="ModifiedUserId != null and ModifiedUserId != '' ">
+			and ModifiedUserId=#{ModifiedUserId}
+		</if>
+		<if test="ModifiedUserName != null and ModifiedUserName != '' ">
+			and ModifiedUserName=#{ModifiedUserName}
+		</if>
+		<if test="ModifiedDate != null and ModifiedDate != '' ">
+			and ModifiedDate=#{ModifiedDate}
+		</if>
+	</select>
+
+
+
+</mapper> 
